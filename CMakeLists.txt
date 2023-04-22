@@ -3,8 +3,8 @@ cmake_minimum_required(VERSION 2.8)
 project(paddle_lite_ocr)
 set(TARGET paddle_lite_ocr)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mfpu=neon")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -mfpu=neon")
 
 # Set ARMLINUX_ARCH_ABI to armv8 or armv7 or armv7hf
 set(ARMLINUX_ARCH_ABI armv7hf)

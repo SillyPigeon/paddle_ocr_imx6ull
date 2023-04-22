@@ -14,6 +14,7 @@
 
 #include "paddle_api.h" // NOLINT
 #include <chrono>
+#include <arm_neon.h>
 
 #include "cls_process.h"
 #include "crnn_process.h"
