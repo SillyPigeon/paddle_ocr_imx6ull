@@ -1,8 +1,8 @@
-# Install script for directory: /home/alientek/ai_proj/paddle/paddle_ocr_imx6ull
+# Install script for directory: /home/alientek/ai_proj/paddle/paddle_lite_ocr
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/install/paddle_lite_ocr")
+  set(CMAKE_INSTALL_PREFIX "/home/alientek/ai_proj/paddle/paddle_lite_ocr/install/paddle_lite_ocr")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -27,12 +27,27 @@ if(NOT CMAKE_INSTALL_COMPONENT)
   endif()
 endif()
 
+# Install shared libraries without execute permission?
+if(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
+  set(CMAKE_INSTALL_SO_NO_EXE "1")
+endif()
+
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/." TYPE EXECUTABLE FILES "/home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/build/paddle_lite_ocr")
   if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/./paddle_lite_ocr" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/./paddle_lite_ocr")
+    file(RPATH_CHECK
+         FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/./paddle_lite_ocr"
+         RPATH "")
+  endif()
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/." TYPE EXECUTABLE FILES "/home/alientek/ai_proj/paddle/paddle_lite_ocr/build/paddle_lite_ocr")
+  if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/./paddle_lite_ocr" AND
+     NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/./paddle_lite_ocr")
+    file(RPATH_CHANGE
+         FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/./paddle_lite_ocr"
+         OLD_RPATH "/home/alientek/ai_proj/paddle/paddle_lite_ocr/cxx/lib:/home/alientek/ai_proj/paddle/paddle_lite_ocr/cxx/opencv-linux-armv7hf/lib:"
+         NEW_RPATH "")
     if(CMAKE_INSTALL_DO_STRIP)
-      execute_process(COMMAND "/usr/local/arm/gcc-linaro-4.9.4-2017.01-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-strip" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/./paddle_lite_ocr")
+      execute_process(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/./paddle_lite_ocr")
     endif()
   endif()
 endif()
@@ -45,5 +60,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/alientek/ai_proj/paddle/paddle_lite_ocr/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

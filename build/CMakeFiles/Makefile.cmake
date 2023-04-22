@@ -8,7 +8,6 @@ set(CMAKE_DEPENDS_GENERATOR "Unix Makefiles")
 set(CMAKE_MAKEFILE_DEPENDS
   "CMakeCache.txt"
   "../CMakeLists.txt"
-  "CMakeCache.txt"
   "CMakeFiles/3.5.1/CMakeCCompiler.cmake"
   "CMakeFiles/3.5.1/CMakeCXXCompiler.cmake"
   "CMakeFiles/3.5.1/CMakeSystem.cmake"
@@ -30,6 +29,11 @@ set(CMAKE_MAKEFILE_DEPENDS
   "/usr/share/cmake-3.5/Modules/FindOpenMP.cmake"
   "/usr/share/cmake-3.5/Modules/FindPackageHandleStandardArgs.cmake"
   "/usr/share/cmake-3.5/Modules/FindPackageMessage.cmake"
+  "/usr/share/cmake-3.5/Modules/Platform/Linux-GNU-C.cmake"
+  "/usr/share/cmake-3.5/Modules/Platform/Linux-GNU-CXX.cmake"
+  "/usr/share/cmake-3.5/Modules/Platform/Linux-GNU.cmake"
+  "/usr/share/cmake-3.5/Modules/Platform/Linux.cmake"
+  "/usr/share/cmake-3.5/Modules/Platform/UnixPaths.cmake"
   )
 
 # The corresponding makefile is:
@@ -40,7 +44,6 @@ set(CMAKE_MAKEFILE_OUTPUTS
 
 # Byproducts of CMake generate step:
 set(CMAKE_MAKEFILE_PRODUCTS
-  "CopyOfCMakeCache.txt"
   "CMakeFiles/CMakeDirectoryInformation.cmake"
   )
 

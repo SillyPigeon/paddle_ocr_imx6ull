@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/alientek/ai_proj/paddle/paddle_ocr_imx6ull
+CMAKE_SOURCE_DIR = /home/alientek/ai_proj/paddle/paddle_lite_ocr
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/build
+CMAKE_BINARY_DIR = /home/alientek/ai_proj/paddle/paddle_lite_ocr/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -114,7 +114,7 @@ install/strip/fast: install/strip
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake cache editor..."
-	/usr/bin/cmake-gui -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	/usr/bin/ccmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -124,9 +124,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/build/CMakeFiles /home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/build/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/alientek/ai_proj/paddle/paddle_lite_ocr/build/CMakeFiles /home/alientek/ai_proj/paddle/paddle_lite_ocr/build/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/alientek/ai_proj/paddle/paddle_lite_ocr/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -167,14 +167,14 @@ paddle_lite_ocr/fast:
 	$(MAKE) -f CMakeFiles/paddle_lite_ocr.dir/build.make CMakeFiles/paddle_lite_ocr.dir/build
 .PHONY : paddle_lite_ocr/fast
 
-clipper.obj: clipper.cpp.obj
+clipper.o: clipper.cpp.o
 
-.PHONY : clipper.obj
+.PHONY : clipper.o
 
 # target to build an object file
-clipper.cpp.obj:
-	$(MAKE) -f CMakeFiles/paddle_lite_ocr.dir/build.make CMakeFiles/paddle_lite_ocr.dir/clipper.cpp.obj
-.PHONY : clipper.cpp.obj
+clipper.cpp.o:
+	$(MAKE) -f CMakeFiles/paddle_lite_ocr.dir/build.make CMakeFiles/paddle_lite_ocr.dir/clipper.cpp.o
+.PHONY : clipper.cpp.o
 
 clipper.i: clipper.cpp.i
 
@@ -194,14 +194,14 @@ clipper.cpp.s:
 	$(MAKE) -f CMakeFiles/paddle_lite_ocr.dir/build.make CMakeFiles/paddle_lite_ocr.dir/clipper.cpp.s
 .PHONY : clipper.cpp.s
 
-cls_process.obj: cls_process.cc.obj
+cls_process.o: cls_process.cc.o
 
-.PHONY : cls_process.obj
+.PHONY : cls_process.o
 
 # target to build an object file
-cls_process.cc.obj:
-	$(MAKE) -f CMakeFiles/paddle_lite_ocr.dir/build.make CMakeFiles/paddle_lite_ocr.dir/cls_process.cc.obj
-.PHONY : cls_process.cc.obj
+cls_process.cc.o:
+	$(MAKE) -f CMakeFiles/paddle_lite_ocr.dir/build.make CMakeFiles/paddle_lite_ocr.dir/cls_process.cc.o
+.PHONY : cls_process.cc.o
 
 cls_process.i: cls_process.cc.i
 
@@ -221,14 +221,14 @@ cls_process.cc.s:
 	$(MAKE) -f CMakeFiles/paddle_lite_ocr.dir/build.make CMakeFiles/paddle_lite_ocr.dir/cls_process.cc.s
 .PHONY : cls_process.cc.s
 
-crnn_process.obj: crnn_process.cc.obj
+crnn_process.o: crnn_process.cc.o
 
-.PHONY : crnn_process.obj
+.PHONY : crnn_process.o
 
 # target to build an object file
-crnn_process.cc.obj:
-	$(MAKE) -f CMakeFiles/paddle_lite_ocr.dir/build.make CMakeFiles/paddle_lite_ocr.dir/crnn_process.cc.obj
-.PHONY : crnn_process.cc.obj
+crnn_process.cc.o:
+	$(MAKE) -f CMakeFiles/paddle_lite_ocr.dir/build.make CMakeFiles/paddle_lite_ocr.dir/crnn_process.cc.o
+.PHONY : crnn_process.cc.o
 
 crnn_process.i: crnn_process.cc.i
 
@@ -248,14 +248,14 @@ crnn_process.cc.s:
 	$(MAKE) -f CMakeFiles/paddle_lite_ocr.dir/build.make CMakeFiles/paddle_lite_ocr.dir/crnn_process.cc.s
 .PHONY : crnn_process.cc.s
 
-db_post_process.obj: db_post_process.cc.obj
+db_post_process.o: db_post_process.cc.o
 
-.PHONY : db_post_process.obj
+.PHONY : db_post_process.o
 
 # target to build an object file
-db_post_process.cc.obj:
-	$(MAKE) -f CMakeFiles/paddle_lite_ocr.dir/build.make CMakeFiles/paddle_lite_ocr.dir/db_post_process.cc.obj
-.PHONY : db_post_process.cc.obj
+db_post_process.cc.o:
+	$(MAKE) -f CMakeFiles/paddle_lite_ocr.dir/build.make CMakeFiles/paddle_lite_ocr.dir/db_post_process.cc.o
+.PHONY : db_post_process.cc.o
 
 db_post_process.i: db_post_process.cc.i
 
@@ -275,14 +275,14 @@ db_post_process.cc.s:
 	$(MAKE) -f CMakeFiles/paddle_lite_ocr.dir/build.make CMakeFiles/paddle_lite_ocr.dir/db_post_process.cc.s
 .PHONY : db_post_process.cc.s
 
-ocr_db_crnn.obj: ocr_db_crnn.cc.obj
+ocr_db_crnn.o: ocr_db_crnn.cc.o
 
-.PHONY : ocr_db_crnn.obj
+.PHONY : ocr_db_crnn.o
 
 # target to build an object file
-ocr_db_crnn.cc.obj:
-	$(MAKE) -f CMakeFiles/paddle_lite_ocr.dir/build.make CMakeFiles/paddle_lite_ocr.dir/ocr_db_crnn.cc.obj
-.PHONY : ocr_db_crnn.cc.obj
+ocr_db_crnn.cc.o:
+	$(MAKE) -f CMakeFiles/paddle_lite_ocr.dir/build.make CMakeFiles/paddle_lite_ocr.dir/ocr_db_crnn.cc.o
+.PHONY : ocr_db_crnn.cc.o
 
 ocr_db_crnn.i: ocr_db_crnn.cc.i
 
@@ -315,19 +315,19 @@ help:
 	@echo "... install/strip"
 	@echo "... paddle_lite_ocr"
 	@echo "... edit_cache"
-	@echo "... clipper.obj"
+	@echo "... clipper.o"
 	@echo "... clipper.i"
 	@echo "... clipper.s"
-	@echo "... cls_process.obj"
+	@echo "... cls_process.o"
 	@echo "... cls_process.i"
 	@echo "... cls_process.s"
-	@echo "... crnn_process.obj"
+	@echo "... crnn_process.o"
 	@echo "... crnn_process.i"
 	@echo "... crnn_process.s"
-	@echo "... db_post_process.obj"
+	@echo "... db_post_process.o"
 	@echo "... db_post_process.i"
 	@echo "... db_post_process.s"
-	@echo "... ocr_db_crnn.obj"
+	@echo "... ocr_db_crnn.o"
 	@echo "... ocr_db_crnn.i"
 	@echo "... ocr_db_crnn.s"
 .PHONY : help

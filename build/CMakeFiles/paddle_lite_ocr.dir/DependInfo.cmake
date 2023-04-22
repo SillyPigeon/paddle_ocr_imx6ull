@@ -4,11 +4,11 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/clipper.cpp" "/home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/build/CMakeFiles/paddle_lite_ocr.dir/clipper.cpp.obj"
-  "/home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/cls_process.cc" "/home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/build/CMakeFiles/paddle_lite_ocr.dir/cls_process.cc.obj"
-  "/home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/crnn_process.cc" "/home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/build/CMakeFiles/paddle_lite_ocr.dir/crnn_process.cc.obj"
-  "/home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/db_post_process.cc" "/home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/build/CMakeFiles/paddle_lite_ocr.dir/db_post_process.cc.obj"
-  "/home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/ocr_db_crnn.cc" "/home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/build/CMakeFiles/paddle_lite_ocr.dir/ocr_db_crnn.cc.obj"
+  "/home/alientek/ai_proj/paddle/paddle_lite_ocr/clipper.cpp" "/home/alientek/ai_proj/paddle/paddle_lite_ocr/build/CMakeFiles/paddle_lite_ocr.dir/clipper.cpp.o"
+  "/home/alientek/ai_proj/paddle/paddle_lite_ocr/cls_process.cc" "/home/alientek/ai_proj/paddle/paddle_lite_ocr/build/CMakeFiles/paddle_lite_ocr.dir/cls_process.cc.o"
+  "/home/alientek/ai_proj/paddle/paddle_lite_ocr/crnn_process.cc" "/home/alientek/ai_proj/paddle/paddle_lite_ocr/build/CMakeFiles/paddle_lite_ocr.dir/crnn_process.cc.o"
+  "/home/alientek/ai_proj/paddle/paddle_lite_ocr/db_post_process.cc" "/home/alientek/ai_proj/paddle/paddle_lite_ocr/build/CMakeFiles/paddle_lite_ocr.dir/db_post_process.cc.o"
+  "/home/alientek/ai_proj/paddle/paddle_lite_ocr/ocr_db_crnn.cc" "/home/alientek/ai_proj/paddle/paddle_lite_ocr/build/CMakeFiles/paddle_lite_ocr.dir/ocr_db_crnn.cc.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/alientek/ai_proj/paddle/paddle_ocr_imx6ull
+CMAKE_SOURCE_DIR = /home/alientek/ai_proj/paddle/paddle_lite_ocr
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/build
+CMAKE_BINARY_DIR = /home/alientek/ai_proj/paddle/paddle_lite_ocr/build
 
 # Include any dependencies generated for this target.
 include CMakeFiles/paddle_lite_ocr.dir/depend.make
@@ -57,142 +57,142 @@ include CMakeFiles/paddle_lite_ocr.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/paddle_lite_ocr.dir/flags.make
 
-CMakeFiles/paddle_lite_ocr.dir/ocr_db_crnn.cc.obj: CMakeFiles/paddle_lite_ocr.dir/flags.make
-CMakeFiles/paddle_lite_ocr.dir/ocr_db_crnn.cc.obj: ../ocr_db_crnn.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/paddle_lite_ocr.dir/ocr_db_crnn.cc.obj"
-	/usr/local/arm/gcc-linaro-4.9.4-2017.01-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/paddle_lite_ocr.dir/ocr_db_crnn.cc.obj -c /home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/ocr_db_crnn.cc
+CMakeFiles/paddle_lite_ocr.dir/ocr_db_crnn.cc.o: CMakeFiles/paddle_lite_ocr.dir/flags.make
+CMakeFiles/paddle_lite_ocr.dir/ocr_db_crnn.cc.o: ../ocr_db_crnn.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/alientek/ai_proj/paddle/paddle_lite_ocr/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/paddle_lite_ocr.dir/ocr_db_crnn.cc.o"
+	/usr/local/arm/gcc-linaro-4.9.4-2017.01-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/paddle_lite_ocr.dir/ocr_db_crnn.cc.o -c /home/alientek/ai_proj/paddle/paddle_lite_ocr/ocr_db_crnn.cc
 
 CMakeFiles/paddle_lite_ocr.dir/ocr_db_crnn.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/paddle_lite_ocr.dir/ocr_db_crnn.cc.i"
-	/usr/local/arm/gcc-linaro-4.9.4-2017.01-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/ocr_db_crnn.cc > CMakeFiles/paddle_lite_ocr.dir/ocr_db_crnn.cc.i
+	/usr/local/arm/gcc-linaro-4.9.4-2017.01-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/alientek/ai_proj/paddle/paddle_lite_ocr/ocr_db_crnn.cc > CMakeFiles/paddle_lite_ocr.dir/ocr_db_crnn.cc.i
 
 CMakeFiles/paddle_lite_ocr.dir/ocr_db_crnn.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/paddle_lite_ocr.dir/ocr_db_crnn.cc.s"
-	/usr/local/arm/gcc-linaro-4.9.4-2017.01-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/ocr_db_crnn.cc -o CMakeFiles/paddle_lite_ocr.dir/ocr_db_crnn.cc.s
+	/usr/local/arm/gcc-linaro-4.9.4-2017.01-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/alientek/ai_proj/paddle/paddle_lite_ocr/ocr_db_crnn.cc -o CMakeFiles/paddle_lite_ocr.dir/ocr_db_crnn.cc.s
 
-CMakeFiles/paddle_lite_ocr.dir/ocr_db_crnn.cc.obj.requires:
+CMakeFiles/paddle_lite_ocr.dir/ocr_db_crnn.cc.o.requires:
 
-.PHONY : CMakeFiles/paddle_lite_ocr.dir/ocr_db_crnn.cc.obj.requires
+.PHONY : CMakeFiles/paddle_lite_ocr.dir/ocr_db_crnn.cc.o.requires
 
-CMakeFiles/paddle_lite_ocr.dir/ocr_db_crnn.cc.obj.provides: CMakeFiles/paddle_lite_ocr.dir/ocr_db_crnn.cc.obj.requires
-	$(MAKE) -f CMakeFiles/paddle_lite_ocr.dir/build.make CMakeFiles/paddle_lite_ocr.dir/ocr_db_crnn.cc.obj.provides.build
-.PHONY : CMakeFiles/paddle_lite_ocr.dir/ocr_db_crnn.cc.obj.provides
+CMakeFiles/paddle_lite_ocr.dir/ocr_db_crnn.cc.o.provides: CMakeFiles/paddle_lite_ocr.dir/ocr_db_crnn.cc.o.requires
+	$(MAKE) -f CMakeFiles/paddle_lite_ocr.dir/build.make CMakeFiles/paddle_lite_ocr.dir/ocr_db_crnn.cc.o.provides.build
+.PHONY : CMakeFiles/paddle_lite_ocr.dir/ocr_db_crnn.cc.o.provides
 
-CMakeFiles/paddle_lite_ocr.dir/ocr_db_crnn.cc.obj.provides.build: CMakeFiles/paddle_lite_ocr.dir/ocr_db_crnn.cc.obj
+CMakeFiles/paddle_lite_ocr.dir/ocr_db_crnn.cc.o.provides.build: CMakeFiles/paddle_lite_ocr.dir/ocr_db_crnn.cc.o
 
 
-CMakeFiles/paddle_lite_ocr.dir/cls_process.cc.obj: CMakeFiles/paddle_lite_ocr.dir/flags.make
-CMakeFiles/paddle_lite_ocr.dir/cls_process.cc.obj: ../cls_process.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/paddle_lite_ocr.dir/cls_process.cc.obj"
-	/usr/local/arm/gcc-linaro-4.9.4-2017.01-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/paddle_lite_ocr.dir/cls_process.cc.obj -c /home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/cls_process.cc
+CMakeFiles/paddle_lite_ocr.dir/cls_process.cc.o: CMakeFiles/paddle_lite_ocr.dir/flags.make
+CMakeFiles/paddle_lite_ocr.dir/cls_process.cc.o: ../cls_process.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/alientek/ai_proj/paddle/paddle_lite_ocr/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/paddle_lite_ocr.dir/cls_process.cc.o"
+	/usr/local/arm/gcc-linaro-4.9.4-2017.01-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/paddle_lite_ocr.dir/cls_process.cc.o -c /home/alientek/ai_proj/paddle/paddle_lite_ocr/cls_process.cc
 
 CMakeFiles/paddle_lite_ocr.dir/cls_process.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/paddle_lite_ocr.dir/cls_process.cc.i"
-	/usr/local/arm/gcc-linaro-4.9.4-2017.01-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/cls_process.cc > CMakeFiles/paddle_lite_ocr.dir/cls_process.cc.i
+	/usr/local/arm/gcc-linaro-4.9.4-2017.01-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/alientek/ai_proj/paddle/paddle_lite_ocr/cls_process.cc > CMakeFiles/paddle_lite_ocr.dir/cls_process.cc.i
 
 CMakeFiles/paddle_lite_ocr.dir/cls_process.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/paddle_lite_ocr.dir/cls_process.cc.s"
-	/usr/local/arm/gcc-linaro-4.9.4-2017.01-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/cls_process.cc -o CMakeFiles/paddle_lite_ocr.dir/cls_process.cc.s
+	/usr/local/arm/gcc-linaro-4.9.4-2017.01-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/alientek/ai_proj/paddle/paddle_lite_ocr/cls_process.cc -o CMakeFiles/paddle_lite_ocr.dir/cls_process.cc.s
 
-CMakeFiles/paddle_lite_ocr.dir/cls_process.cc.obj.requires:
+CMakeFiles/paddle_lite_ocr.dir/cls_process.cc.o.requires:
 
-.PHONY : CMakeFiles/paddle_lite_ocr.dir/cls_process.cc.obj.requires
+.PHONY : CMakeFiles/paddle_lite_ocr.dir/cls_process.cc.o.requires
 
-CMakeFiles/paddle_lite_ocr.dir/cls_process.cc.obj.provides: CMakeFiles/paddle_lite_ocr.dir/cls_process.cc.obj.requires
-	$(MAKE) -f CMakeFiles/paddle_lite_ocr.dir/build.make CMakeFiles/paddle_lite_ocr.dir/cls_process.cc.obj.provides.build
-.PHONY : CMakeFiles/paddle_lite_ocr.dir/cls_process.cc.obj.provides
+CMakeFiles/paddle_lite_ocr.dir/cls_process.cc.o.provides: CMakeFiles/paddle_lite_ocr.dir/cls_process.cc.o.requires
+	$(MAKE) -f CMakeFiles/paddle_lite_ocr.dir/build.make CMakeFiles/paddle_lite_ocr.dir/cls_process.cc.o.provides.build
+.PHONY : CMakeFiles/paddle_lite_ocr.dir/cls_process.cc.o.provides
 
-CMakeFiles/paddle_lite_ocr.dir/cls_process.cc.obj.provides.build: CMakeFiles/paddle_lite_ocr.dir/cls_process.cc.obj
+CMakeFiles/paddle_lite_ocr.dir/cls_process.cc.o.provides.build: CMakeFiles/paddle_lite_ocr.dir/cls_process.cc.o
 
 
-CMakeFiles/paddle_lite_ocr.dir/db_post_process.cc.obj: CMakeFiles/paddle_lite_ocr.dir/flags.make
-CMakeFiles/paddle_lite_ocr.dir/db_post_process.cc.obj: ../db_post_process.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/paddle_lite_ocr.dir/db_post_process.cc.obj"
-	/usr/local/arm/gcc-linaro-4.9.4-2017.01-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/paddle_lite_ocr.dir/db_post_process.cc.obj -c /home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/db_post_process.cc
+CMakeFiles/paddle_lite_ocr.dir/db_post_process.cc.o: CMakeFiles/paddle_lite_ocr.dir/flags.make
+CMakeFiles/paddle_lite_ocr.dir/db_post_process.cc.o: ../db_post_process.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/alientek/ai_proj/paddle/paddle_lite_ocr/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/paddle_lite_ocr.dir/db_post_process.cc.o"
+	/usr/local/arm/gcc-linaro-4.9.4-2017.01-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/paddle_lite_ocr.dir/db_post_process.cc.o -c /home/alientek/ai_proj/paddle/paddle_lite_ocr/db_post_process.cc
 
 CMakeFiles/paddle_lite_ocr.dir/db_post_process.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/paddle_lite_ocr.dir/db_post_process.cc.i"
-	/usr/local/arm/gcc-linaro-4.9.4-2017.01-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/db_post_process.cc > CMakeFiles/paddle_lite_ocr.dir/db_post_process.cc.i
+	/usr/local/arm/gcc-linaro-4.9.4-2017.01-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/alientek/ai_proj/paddle/paddle_lite_ocr/db_post_process.cc > CMakeFiles/paddle_lite_ocr.dir/db_post_process.cc.i
 
 CMakeFiles/paddle_lite_ocr.dir/db_post_process.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/paddle_lite_ocr.dir/db_post_process.cc.s"
-	/usr/local/arm/gcc-linaro-4.9.4-2017.01-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/db_post_process.cc -o CMakeFiles/paddle_lite_ocr.dir/db_post_process.cc.s
+	/usr/local/arm/gcc-linaro-4.9.4-2017.01-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/alientek/ai_proj/paddle/paddle_lite_ocr/db_post_process.cc -o CMakeFiles/paddle_lite_ocr.dir/db_post_process.cc.s
 
-CMakeFiles/paddle_lite_ocr.dir/db_post_process.cc.obj.requires:
+CMakeFiles/paddle_lite_ocr.dir/db_post_process.cc.o.requires:
 
-.PHONY : CMakeFiles/paddle_lite_ocr.dir/db_post_process.cc.obj.requires
+.PHONY : CMakeFiles/paddle_lite_ocr.dir/db_post_process.cc.o.requires
 
-CMakeFiles/paddle_lite_ocr.dir/db_post_process.cc.obj.provides: CMakeFiles/paddle_lite_ocr.dir/db_post_process.cc.obj.requires
-	$(MAKE) -f CMakeFiles/paddle_lite_ocr.dir/build.make CMakeFiles/paddle_lite_ocr.dir/db_post_process.cc.obj.provides.build
-.PHONY : CMakeFiles/paddle_lite_ocr.dir/db_post_process.cc.obj.provides
+CMakeFiles/paddle_lite_ocr.dir/db_post_process.cc.o.provides: CMakeFiles/paddle_lite_ocr.dir/db_post_process.cc.o.requires
+	$(MAKE) -f CMakeFiles/paddle_lite_ocr.dir/build.make CMakeFiles/paddle_lite_ocr.dir/db_post_process.cc.o.provides.build
+.PHONY : CMakeFiles/paddle_lite_ocr.dir/db_post_process.cc.o.provides
 
-CMakeFiles/paddle_lite_ocr.dir/db_post_process.cc.obj.provides.build: CMakeFiles/paddle_lite_ocr.dir/db_post_process.cc.obj
+CMakeFiles/paddle_lite_ocr.dir/db_post_process.cc.o.provides.build: CMakeFiles/paddle_lite_ocr.dir/db_post_process.cc.o
 
 
-CMakeFiles/paddle_lite_ocr.dir/crnn_process.cc.obj: CMakeFiles/paddle_lite_ocr.dir/flags.make
-CMakeFiles/paddle_lite_ocr.dir/crnn_process.cc.obj: ../crnn_process.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/paddle_lite_ocr.dir/crnn_process.cc.obj"
-	/usr/local/arm/gcc-linaro-4.9.4-2017.01-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/paddle_lite_ocr.dir/crnn_process.cc.obj -c /home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/crnn_process.cc
+CMakeFiles/paddle_lite_ocr.dir/crnn_process.cc.o: CMakeFiles/paddle_lite_ocr.dir/flags.make
+CMakeFiles/paddle_lite_ocr.dir/crnn_process.cc.o: ../crnn_process.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/alientek/ai_proj/paddle/paddle_lite_ocr/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/paddle_lite_ocr.dir/crnn_process.cc.o"
+	/usr/local/arm/gcc-linaro-4.9.4-2017.01-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/paddle_lite_ocr.dir/crnn_process.cc.o -c /home/alientek/ai_proj/paddle/paddle_lite_ocr/crnn_process.cc
 
 CMakeFiles/paddle_lite_ocr.dir/crnn_process.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/paddle_lite_ocr.dir/crnn_process.cc.i"
-	/usr/local/arm/gcc-linaro-4.9.4-2017.01-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/crnn_process.cc > CMakeFiles/paddle_lite_ocr.dir/crnn_process.cc.i
+	/usr/local/arm/gcc-linaro-4.9.4-2017.01-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/alientek/ai_proj/paddle/paddle_lite_ocr/crnn_process.cc > CMakeFiles/paddle_lite_ocr.dir/crnn_process.cc.i
 
 CMakeFiles/paddle_lite_ocr.dir/crnn_process.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/paddle_lite_ocr.dir/crnn_process.cc.s"
-	/usr/local/arm/gcc-linaro-4.9.4-2017.01-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/crnn_process.cc -o CMakeFiles/paddle_lite_ocr.dir/crnn_process.cc.s
+	/usr/local/arm/gcc-linaro-4.9.4-2017.01-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/alientek/ai_proj/paddle/paddle_lite_ocr/crnn_process.cc -o CMakeFiles/paddle_lite_ocr.dir/crnn_process.cc.s
 
-CMakeFiles/paddle_lite_ocr.dir/crnn_process.cc.obj.requires:
+CMakeFiles/paddle_lite_ocr.dir/crnn_process.cc.o.requires:
 
-.PHONY : CMakeFiles/paddle_lite_ocr.dir/crnn_process.cc.obj.requires
+.PHONY : CMakeFiles/paddle_lite_ocr.dir/crnn_process.cc.o.requires
 
-CMakeFiles/paddle_lite_ocr.dir/crnn_process.cc.obj.provides: CMakeFiles/paddle_lite_ocr.dir/crnn_process.cc.obj.requires
-	$(MAKE) -f CMakeFiles/paddle_lite_ocr.dir/build.make CMakeFiles/paddle_lite_ocr.dir/crnn_process.cc.obj.provides.build
-.PHONY : CMakeFiles/paddle_lite_ocr.dir/crnn_process.cc.obj.provides
+CMakeFiles/paddle_lite_ocr.dir/crnn_process.cc.o.provides: CMakeFiles/paddle_lite_ocr.dir/crnn_process.cc.o.requires
+	$(MAKE) -f CMakeFiles/paddle_lite_ocr.dir/build.make CMakeFiles/paddle_lite_ocr.dir/crnn_process.cc.o.provides.build
+.PHONY : CMakeFiles/paddle_lite_ocr.dir/crnn_process.cc.o.provides
 
-CMakeFiles/paddle_lite_ocr.dir/crnn_process.cc.obj.provides.build: CMakeFiles/paddle_lite_ocr.dir/crnn_process.cc.obj
+CMakeFiles/paddle_lite_ocr.dir/crnn_process.cc.o.provides.build: CMakeFiles/paddle_lite_ocr.dir/crnn_process.cc.o
 
 
-CMakeFiles/paddle_lite_ocr.dir/clipper.cpp.obj: CMakeFiles/paddle_lite_ocr.dir/flags.make
-CMakeFiles/paddle_lite_ocr.dir/clipper.cpp.obj: ../clipper.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/paddle_lite_ocr.dir/clipper.cpp.obj"
-	/usr/local/arm/gcc-linaro-4.9.4-2017.01-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/paddle_lite_ocr.dir/clipper.cpp.obj -c /home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/clipper.cpp
+CMakeFiles/paddle_lite_ocr.dir/clipper.cpp.o: CMakeFiles/paddle_lite_ocr.dir/flags.make
+CMakeFiles/paddle_lite_ocr.dir/clipper.cpp.o: ../clipper.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/alientek/ai_proj/paddle/paddle_lite_ocr/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/paddle_lite_ocr.dir/clipper.cpp.o"
+	/usr/local/arm/gcc-linaro-4.9.4-2017.01-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/paddle_lite_ocr.dir/clipper.cpp.o -c /home/alientek/ai_proj/paddle/paddle_lite_ocr/clipper.cpp
 
 CMakeFiles/paddle_lite_ocr.dir/clipper.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/paddle_lite_ocr.dir/clipper.cpp.i"
-	/usr/local/arm/gcc-linaro-4.9.4-2017.01-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/clipper.cpp > CMakeFiles/paddle_lite_ocr.dir/clipper.cpp.i
+	/usr/local/arm/gcc-linaro-4.9.4-2017.01-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/alientek/ai_proj/paddle/paddle_lite_ocr/clipper.cpp > CMakeFiles/paddle_lite_ocr.dir/clipper.cpp.i
 
 CMakeFiles/paddle_lite_ocr.dir/clipper.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/paddle_lite_ocr.dir/clipper.cpp.s"
-	/usr/local/arm/gcc-linaro-4.9.4-2017.01-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/clipper.cpp -o CMakeFiles/paddle_lite_ocr.dir/clipper.cpp.s
+	/usr/local/arm/gcc-linaro-4.9.4-2017.01-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/alientek/ai_proj/paddle/paddle_lite_ocr/clipper.cpp -o CMakeFiles/paddle_lite_ocr.dir/clipper.cpp.s
 
-CMakeFiles/paddle_lite_ocr.dir/clipper.cpp.obj.requires:
+CMakeFiles/paddle_lite_ocr.dir/clipper.cpp.o.requires:
 
-.PHONY : CMakeFiles/paddle_lite_ocr.dir/clipper.cpp.obj.requires
+.PHONY : CMakeFiles/paddle_lite_ocr.dir/clipper.cpp.o.requires
 
-CMakeFiles/paddle_lite_ocr.dir/clipper.cpp.obj.provides: CMakeFiles/paddle_lite_ocr.dir/clipper.cpp.obj.requires
-	$(MAKE) -f CMakeFiles/paddle_lite_ocr.dir/build.make CMakeFiles/paddle_lite_ocr.dir/clipper.cpp.obj.provides.build
-.PHONY : CMakeFiles/paddle_lite_ocr.dir/clipper.cpp.obj.provides
+CMakeFiles/paddle_lite_ocr.dir/clipper.cpp.o.provides: CMakeFiles/paddle_lite_ocr.dir/clipper.cpp.o.requires
+	$(MAKE) -f CMakeFiles/paddle_lite_ocr.dir/build.make CMakeFiles/paddle_lite_ocr.dir/clipper.cpp.o.provides.build
+.PHONY : CMakeFiles/paddle_lite_ocr.dir/clipper.cpp.o.provides
 
-CMakeFiles/paddle_lite_ocr.dir/clipper.cpp.obj.provides.build: CMakeFiles/paddle_lite_ocr.dir/clipper.cpp.obj
+CMakeFiles/paddle_lite_ocr.dir/clipper.cpp.o.provides.build: CMakeFiles/paddle_lite_ocr.dir/clipper.cpp.o
 
 
 # Object files for target paddle_lite_ocr
 paddle_lite_ocr_OBJECTS = \
-"CMakeFiles/paddle_lite_ocr.dir/ocr_db_crnn.cc.obj" \
-"CMakeFiles/paddle_lite_ocr.dir/cls_process.cc.obj" \
-"CMakeFiles/paddle_lite_ocr.dir/db_post_process.cc.obj" \
-"CMakeFiles/paddle_lite_ocr.dir/crnn_process.cc.obj" \
-"CMakeFiles/paddle_lite_ocr.dir/clipper.cpp.obj"
+"CMakeFiles/paddle_lite_ocr.dir/ocr_db_crnn.cc.o" \
+"CMakeFiles/paddle_lite_ocr.dir/cls_process.cc.o" \
+"CMakeFiles/paddle_lite_ocr.dir/db_post_process.cc.o" \
+"CMakeFiles/paddle_lite_ocr.dir/crnn_process.cc.o" \
+"CMakeFiles/paddle_lite_ocr.dir/clipper.cpp.o"
 
 # External object files for target paddle_lite_ocr
 paddle_lite_ocr_EXTERNAL_OBJECTS =
 
-paddle_lite_ocr: CMakeFiles/paddle_lite_ocr.dir/ocr_db_crnn.cc.obj
-paddle_lite_ocr: CMakeFiles/paddle_lite_ocr.dir/cls_process.cc.obj
-paddle_lite_ocr: CMakeFiles/paddle_lite_ocr.dir/db_post_process.cc.obj
-paddle_lite_ocr: CMakeFiles/paddle_lite_ocr.dir/crnn_process.cc.obj
-paddle_lite_ocr: CMakeFiles/paddle_lite_ocr.dir/clipper.cpp.obj
+paddle_lite_ocr: CMakeFiles/paddle_lite_ocr.dir/ocr_db_crnn.cc.o
+paddle_lite_ocr: CMakeFiles/paddle_lite_ocr.dir/cls_process.cc.o
+paddle_lite_ocr: CMakeFiles/paddle_lite_ocr.dir/db_post_process.cc.o
+paddle_lite_ocr: CMakeFiles/paddle_lite_ocr.dir/crnn_process.cc.o
+paddle_lite_ocr: CMakeFiles/paddle_lite_ocr.dir/clipper.cpp.o
 paddle_lite_ocr: CMakeFiles/paddle_lite_ocr.dir/build.make
 paddle_lite_ocr: ../cxx/opencv-linux-armv7hf/lib/libopencv_dnn.so
 paddle_lite_ocr: ../cxx/opencv-linux-armv7hf/lib/libopencv_superres.so
@@ -212,7 +212,7 @@ paddle_lite_ocr: ../cxx/opencv-linux-armv7hf/lib/libopencv_imgcodecs.so
 paddle_lite_ocr: ../cxx/opencv-linux-armv7hf/lib/libopencv_imgproc.so
 paddle_lite_ocr: ../cxx/opencv-linux-armv7hf/lib/libopencv_core.so
 paddle_lite_ocr: CMakeFiles/paddle_lite_ocr.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX executable paddle_lite_ocr"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/alientek/ai_proj/paddle/paddle_lite_ocr/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX executable paddle_lite_ocr"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/paddle_lite_ocr.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -220,11 +220,11 @@ CMakeFiles/paddle_lite_ocr.dir/build: paddle_lite_ocr
 
 .PHONY : CMakeFiles/paddle_lite_ocr.dir/build
 
-CMakeFiles/paddle_lite_ocr.dir/requires: CMakeFiles/paddle_lite_ocr.dir/ocr_db_crnn.cc.obj.requires
-CMakeFiles/paddle_lite_ocr.dir/requires: CMakeFiles/paddle_lite_ocr.dir/cls_process.cc.obj.requires
-CMakeFiles/paddle_lite_ocr.dir/requires: CMakeFiles/paddle_lite_ocr.dir/db_post_process.cc.obj.requires
-CMakeFiles/paddle_lite_ocr.dir/requires: CMakeFiles/paddle_lite_ocr.dir/crnn_process.cc.obj.requires
-CMakeFiles/paddle_lite_ocr.dir/requires: CMakeFiles/paddle_lite_ocr.dir/clipper.cpp.obj.requires
+CMakeFiles/paddle_lite_ocr.dir/requires: CMakeFiles/paddle_lite_ocr.dir/ocr_db_crnn.cc.o.requires
+CMakeFiles/paddle_lite_ocr.dir/requires: CMakeFiles/paddle_lite_ocr.dir/cls_process.cc.o.requires
+CMakeFiles/paddle_lite_ocr.dir/requires: CMakeFiles/paddle_lite_ocr.dir/db_post_process.cc.o.requires
+CMakeFiles/paddle_lite_ocr.dir/requires: CMakeFiles/paddle_lite_ocr.dir/crnn_process.cc.o.requires
+CMakeFiles/paddle_lite_ocr.dir/requires: CMakeFiles/paddle_lite_ocr.dir/clipper.cpp.o.requires
 
 .PHONY : CMakeFiles/paddle_lite_ocr.dir/requires
 
@@ -233,6 +233,6 @@ CMakeFiles/paddle_lite_ocr.dir/clean:
 .PHONY : CMakeFiles/paddle_lite_ocr.dir/clean
 
 CMakeFiles/paddle_lite_ocr.dir/depend:
-	cd /home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/alientek/ai_proj/paddle/paddle_ocr_imx6ull /home/alientek/ai_proj/paddle/paddle_ocr_imx6ull /home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/build /home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/build /home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/build/CMakeFiles/paddle_lite_ocr.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/alientek/ai_proj/paddle/paddle_lite_ocr/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/alientek/ai_proj/paddle/paddle_lite_ocr /home/alientek/ai_proj/paddle/paddle_lite_ocr /home/alientek/ai_proj/paddle/paddle_lite_ocr/build /home/alientek/ai_proj/paddle/paddle_lite_ocr/build /home/alientek/ai_proj/paddle/paddle_lite_ocr/build/CMakeFiles/paddle_lite_ocr.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/paddle_lite_ocr.dir/depend
 
