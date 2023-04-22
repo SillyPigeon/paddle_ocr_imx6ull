@@ -5,6 +5,7 @@ set(TARGET paddle_lite_ocr)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+set(ENABLE_NEON_ON)
 
 # Set ARMLINUX_ARCH_ABI to armv8 or armv7 or armv7hf
 set(ARMLINUX_ARCH_ABI armv7hf)

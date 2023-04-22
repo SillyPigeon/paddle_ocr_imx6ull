@@ -1334,9 +1334,9 @@ opencv2/videostab/global_motion.hpp
 opencv2/videostab/log.hpp
 ../cxx/opencv-linux-armv7hf/include/opencv2/videostab/opencv2/videostab/log.hpp
 
-/home/alientek/ai_proj/paddle/paddle_lite_ocr/clipper.cpp
+/home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/clipper.cpp
 clipper.hpp
-/home/alientek/ai_proj/paddle/paddle_lite_ocr/clipper.hpp
+/home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/clipper.hpp
 cmath
 -
 vector
@@ -1354,7 +1354,7 @@ ostream
 functional
 -
 
-/home/alientek/ai_proj/paddle/paddle_lite_ocr/clipper.hpp
+/home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/clipper.hpp
 vector
 -
 list
@@ -1374,9 +1374,9 @@ functional
 queue
 -
 
-/home/alientek/ai_proj/paddle/paddle_lite_ocr/cls_process.cc
+/home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/cls_process.cc
 cls_process.h
-/home/alientek/ai_proj/paddle/paddle_lite_ocr/cls_process.h
+/home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/cls_process.h
 algorithm
 -
 memory
@@ -1384,7 +1384,7 @@ memory
 string
 -
 
-/home/alientek/ai_proj/paddle/paddle_lite_ocr/cls_process.h
+/home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/cls_process.h
 cstring
 -
 fstream
@@ -1398,17 +1398,17 @@ string
 vector
 -
 math.h
-/home/alientek/ai_proj/paddle/paddle_lite_ocr/math.h
+/home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/math.h
 opencv2/core.hpp
-/home/alientek/ai_proj/paddle/paddle_lite_ocr/opencv2/core.hpp
+/home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/opencv2/core.hpp
 opencv2/imgcodecs.hpp
-/home/alientek/ai_proj/paddle/paddle_lite_ocr/opencv2/imgcodecs.hpp
+/home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/opencv2/imgcodecs.hpp
 opencv2/imgproc.hpp
-/home/alientek/ai_proj/paddle/paddle_lite_ocr/opencv2/imgproc.hpp
+/home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/opencv2/imgproc.hpp
 
-/home/alientek/ai_proj/paddle/paddle_lite_ocr/crnn_process.cc
+/home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/crnn_process.cc
 crnn_process.h
-/home/alientek/ai_proj/paddle/paddle_lite_ocr/crnn_process.h
+/home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/crnn_process.h
 algorithm
 -
 memory
@@ -1416,7 +1416,7 @@ memory
 string
 -
 
-/home/alientek/ai_proj/paddle/paddle_lite_ocr/crnn_process.h
+/home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/crnn_process.h
 cstring
 -
 fstream
@@ -1430,23 +1430,25 @@ string
 vector
 -
 math.h
-/home/alientek/ai_proj/paddle/paddle_lite_ocr/math.h
+/home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/math.h
 opencv2/core.hpp
-/home/alientek/ai_proj/paddle/paddle_lite_ocr/opencv2/core.hpp
+/home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/opencv2/core.hpp
 opencv2/imgcodecs.hpp
-/home/alientek/ai_proj/paddle/paddle_lite_ocr/opencv2/imgcodecs.hpp
+/home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/opencv2/imgcodecs.hpp
 opencv2/imgproc.hpp
-/home/alientek/ai_proj/paddle/paddle_lite_ocr/opencv2/imgproc.hpp
+/home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/opencv2/imgproc.hpp
 
-/home/alientek/ai_proj/paddle/paddle_lite_ocr/db_post_process.cc
+/home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/db_post_process.cc
 db_post_process.h
-/home/alientek/ai_proj/paddle/paddle_lite_ocr/db_post_process.h
+/home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/db_post_process.h
+arm_neon.h
+-
 algorithm
 -
 utility
 -
 
-/home/alientek/ai_proj/paddle/paddle_lite_ocr/db_post_process.h
+/home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/db_post_process.h
 math.h
 -
 iostream
@@ -1456,23 +1458,25 @@ map
 vector
 -
 clipper.hpp
-/home/alientek/ai_proj/paddle/paddle_lite_ocr/clipper.hpp
+/home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/clipper.hpp
 opencv2/core.hpp
-/home/alientek/ai_proj/paddle/paddle_lite_ocr/opencv2/core.hpp
+/home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/opencv2/core.hpp
 opencv2/imgcodecs.hpp
-/home/alientek/ai_proj/paddle/paddle_lite_ocr/opencv2/imgcodecs.hpp
+/home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/opencv2/imgcodecs.hpp
 opencv2/imgproc.hpp
-/home/alientek/ai_proj/paddle/paddle_lite_ocr/opencv2/imgproc.hpp
+/home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/opencv2/imgproc.hpp
 
-/home/alientek/ai_proj/paddle/paddle_lite_ocr/ocr_db_crnn.cc
+/home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/ocr_db_crnn.cc
 paddle_api.h
-/home/alientek/ai_proj/paddle/paddle_lite_ocr/paddle_api.h
+/home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/paddle_api.h
 chrono
 -
+arm_neon.h
+-
 cls_process.h
-/home/alientek/ai_proj/paddle/paddle_lite_ocr/cls_process.h
+/home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/cls_process.h
 crnn_process.h
-/home/alientek/ai_proj/paddle/paddle_lite_ocr/crnn_process.h
+/home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/crnn_process.h
 db_post_process.h
-/home/alientek/ai_proj/paddle/paddle_lite_ocr/db_post_process.h
+/home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/db_post_process.h
 

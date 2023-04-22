@@ -13,6 +13,7 @@
 // limitations under the License.
 
 #include "db_post_process.h" // NOLINT
+#include <arm_neon.h>
 #include <algorithm>
 #include <utility>
 
