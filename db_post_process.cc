@@ -154,16 +154,16 @@ float BoxScoreFast(std::vector<std::vector<float>> box_array, cv::Mat pred) {
   float box_y[4] = {array[0][1], array[1][1], array[2][1], array[3][1]};
 
   int xmin = clamp(
-      static_cast<int>(std::floorf(*(std::min_element(box_x, box_x + 4)))), 0,
+      static_cast<int>(::floorf(*(std::min_element(box_x, box_x + 4)))), 0,
       width - 1);
   int xmax =
-      clamp(static_cast<int>(std::ceilf(*(std::max_element(box_x, box_x + 4)))),
+      clamp(static_cast<int>(::ceilf(*(std::max_element(box_x, box_x + 4)))),
             0, width - 1);
   int ymin = clamp(
-      static_cast<int>(std::floorf(*(std::min_element(box_y, box_y + 4)))), 0,
+      static_cast<int>(::floorf(*(std::min_element(box_y, box_y + 4)))), 0,
       height - 1);
   int ymax =
-      clamp(static_cast<int>(std::ceilf(*(std::max_element(box_y, box_y + 4)))),
+      clamp(static_cast<int>(::ceilf(*(std::max_element(box_y, box_y + 4)))),
             0, height - 1);
 
   cv::Mat mask;
