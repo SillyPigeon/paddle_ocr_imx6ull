@@ -45,6 +45,11 @@ enum class L3CacheSetMethod {
 // return true if current device supports OpenCL model
 LITE_API bool IsOpenCLBackendValid(bool check_fp16_valid = false);
 
+// return current opencl device type,
+// if opencl not enabled or IsOpenCLBackendValid return false, it will return -1
+// UNKNOWN:0, QUALCOMM_ADRENO:1, ARM_MALI:2, IMAGINATION_POWERVR:3, OTHERS:4,
+LITE_API int GetOpenCLDeviceType();
+
 struct LITE_API Tensor {
   explicit Tensor(void* raw);
   explicit Tensor(const void* raw);
@@ -110,6 +115,9 @@ class LITE_API PaddlePredictor {
   virtual std::vector<std::string> GetOutputNames() = 0;
   // Get output names
   virtual std::vector<std::string> GetParamNames();
+
+  /// Release all tmp tensor to compress the size of the memory pool.
+  virtual bool TryShrinkMemory() = 0;
 
   // Get Input by name
   virtual std::unique_ptr<Tensor> GetInputByName(const std::string& name) = 0;
@@ -311,7 +319,7 @@ class LITE_API CxxConfig : public ConfigBase {
   // XPU only, set the size of the workspace memory from L3 cache for the
   // current thread.
   // **DEPRECATED**, use set_xpu_l3_cache_method() in the future
-  void set_xpu_workspace_l3_size_per_thread(int l3_size = 0xfffc00);
+  void set_xpu_workspace_l3_size_per_thread(int l3_size = 0x4000000);
   void set_xpu_l3_cache_method(size_t l3_size, bool locked = false);
 
   void set_xpu_conv_autotune(bool autotune = true,
