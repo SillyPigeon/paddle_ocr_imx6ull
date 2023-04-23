@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 2.8)
 project(paddle_lite_ocr)
 set(TARGET paddle_lite_ocr)
 
+#1.config compiler
 set(CMAKE_SYSTEM_PROCESSOR arm)
 set(CMAKE_C_COMPILER "arm-linux-gnueabihf-gcc")
 set(CMAKE_CXX_COMPILER "arm-linux-gnueabihf-g++")
@@ -10,16 +11,25 @@ set(CMAKE_CXX_COMPILER "arm-linux-gnueabihf-g++")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mfpu=neon")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -mfpu=neon")
 
-# Set ARMLINUX_ARCH_ABI to armv8 or armv7 or armv7hf
+#2.config OpenMP
+set(OpenMP_CXX_FLAGS "-fopenmp")
+set(OpenMP_CXX_LIB_NAMES "gomp;pthread")
+set(OpenMP_C_FLAGS "-fopenmp")
+set(OpenMP_C_LIB_NAMES "gomp;pthread")
+set(OpenMP_gomp_LIBRARY "/usr/arm-linux-gnueabihf/lib/libgomp.so")
+set(OpenMP_pthread_LIBRARY "/usr/arm-linux-gnueabihf/lib/libpthread.so")
+
+#3.Set ARMLINUX_ARCH_ABI to armv8 or armv7 or armv7hf
 set(ARMLINUX_ARCH_ABI armv7hf)
 
-# 1. path to Paddle-Lite lib
+#4. path to Paddle-Lite lib
 set(LITE_DIR "${CMAKE_SOURCE_DIR}/cxx")
 
-# 2. link Paddle-Lite directory
+#5. link Paddle-Lite directory
 link_directories(${LITE_DIR}/lib)
 include_directories(${LITE_DIR}/include)
 
+#6. add OpenMP package
 FIND_PACKAGE( OpenMP REQUIRED)
 if(OPENMP_FOUND)
   message("OPENMP FOUND")
@@ -28,13 +38,13 @@ if(OPENMP_FOUND)
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
 endif()
 
-# opencv
+#7.add opencv lib
 set(OpenCV_DIR ${LITE_DIR}/opencv-linux-armv7hf/share/OpenCV)
 find_package(OpenCV REQUIRED)
 
 set(CMAKE_CXX_STANDARD 14)
 
-# 3.add executable output
+#8.add executable output
 add_executable(${TARGET} ocr_db_crnn.cc cls_process.cc db_post_process.cc crnn_process.cc clipper.cpp)
 target_link_libraries(${TARGET} -lpaddle_light_api_shared ${OpenCV_LIBS})
 target_link_libraries(${TARGET} -ldl)
