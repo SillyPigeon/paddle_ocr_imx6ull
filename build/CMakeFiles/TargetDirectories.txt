@@ -1,7 +1,0 @@
-/home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/build/CMakeFiles/install/strip.dir
-/home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/build/CMakeFiles/install/local.dir
-/home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/build/CMakeFiles/rebuild_cache.dir
-/home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/build/CMakeFiles/paddle_lite_ocr.dir
-/home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/build/CMakeFiles/edit_cache.dir
-/home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/build/CMakeFiles/install.dir
-/home/alientek/ai_proj/paddle/paddle_ocr_imx6ull/build/CMakeFiles/list_install_components.dir
