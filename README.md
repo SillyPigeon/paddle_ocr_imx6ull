@@ -54,9 +54,11 @@ https://www.paddlepaddle.org.cn/lite/develop/source_compile/linux_x86_compile_ar
 
 **1.第一运行编译会不通过，可无视再运行一次脚本build.sh，此问题和环境变量有关，暂未解决**
 
-**2.完成后会自动生成 ./build 保存CMake过程文件 和 ./install arm-linux可执行文件**
+**2.编译、链接Paddle-Lite的so需要arm-linux-gcc-v5.1(满足C++ 11特性)、CMake 3.10以上的版本**
 
-**3.有可能本机安装的arm交叉编译工具无法成功链接工程中的已编译so, 可用paddle源码自行编译**
+**3.完成后会自动生成 ./build/ 保存CMake过程文件 和 ./install/ 保存arm-linux可执行文件**
+
+**4.有可能本机安装的arm交叉编译工具无法成功链接工程中的已编译so, 可用paddle源码自行编译**
 
 ## 4、运行测试说明
 
