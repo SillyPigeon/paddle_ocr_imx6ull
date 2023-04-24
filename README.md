@@ -40,7 +40,7 @@ paddle lite 运行汉字字典文件 --ppocr_keys_v1.txt
 
 下编译目标架构为armv7hf的可执行文件通过。生成bin的目录于./install/paddle_lite_ocr
 
-备注：也可用官方编译paddle-lite的docker镜像进行此工程编译，挂靠目录工程编译可执行如下指令:
+备注：也可用官方编译paddle-lite的docker镜像进行此工程编译，挂靠目录工程编译可执行如下指令，进入docker后直接执行./build.sh即可:
 
 docker run -it --name paddleocr_docker -v $PWD/paddle_ocr_imx6ull:/Paddle-ocr --net=host paddlepaddle/paddle-lite /bin/bash
 
