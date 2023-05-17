@@ -78,6 +78,8 @@ paddle-lite 运行环境库 -- libpaddle_light_api_shared.so
 
 opencv 运行环境库 -- libopencv_*.so
 
+(备注: opencv 库在链接的时候，在不同的板卡系统可能会被指定路径不同，要按照具体位置推送so到对应的路径中去)
+
 #### 步骤2：
 
 将对应 可执行文件/配置/模型/字典/测试图片/运行脚本 推入板卡存储空间中:
