@@ -368,30 +368,54 @@ int main(int argc, char **argv) {
   std::string img_path = argv[4];
   std::string dict_path = argv[5];
 
+  auto start = std::chrono::system_clock::now();
   //// load config from txt file
   auto Config = LoadConfigTxt("./config.txt");
   int use_direction_classify = int(Config["use_direction_classify"]);
 
-  auto start = std::chrono::system_clock::now();
+  auto end_init = std::chrono::system_clock::now();
 
   auto det_predictor = loadModel(det_model_file);
   auto rec_predictor = loadModel(rec_model_file);
   auto cls_predictor = loadModel(cls_model_file);
+
+  auto end_load_model = std::chrono::system_clock::now();
 
   auto charactor_dict = ReadDict(dict_path);
   charactor_dict.insert(charactor_dict.begin(), "#"); // blank char for ctc
   charactor_dict.push_back(" ");
 
   cv::Mat srcimg = cv::imread(img_path, cv::IMREAD_COLOR);
+
+  auto end_load_imgs = std::chrono::system_clock::now();
+
   auto boxes = RunDetModel(det_predictor, srcimg, Config);
 
   std::vector<std::string> rec_text;
   std::vector<float> rec_text_score;
 
+  auto end_RunDetModel = std::chrono::system_clock::now();
+
   RunRecModel(boxes, srcimg, rec_predictor, rec_text, rec_text_score,
               charactor_dict, cls_predictor, use_direction_classify);
 
   auto end = std::chrono::system_clock::now();
+
+  auto duration_init =
+      std::chrono::duration_cast<std::chrono::microseconds>(end_init - start);
+
+  auto duration_load_model =
+      std::chrono::duration_cast<std::chrono::microseconds>(end_load_model - end_init);
+
+  auto duration_load_imgs =
+      std::chrono::duration_cast<std::chrono::microseconds>(end_load_imgs - end_load_model);
+
+  auto duration_RunDetModel =
+      std::chrono::duration_cast<std::chrono::microseconds>(end_RunDetModel - end_load_imgs);
+
+  auto duration_RunRecModel =
+      std::chrono::duration_cast<std::chrono::microseconds>(end - end_RunDetModel);
+
   auto duration =
       std::chrono::duration_cast<std::chrono::microseconds>(end - start);
 
@@ -403,8 +427,33 @@ int main(int argc, char **argv) {
     std::cout << i << "\t" << rec_text[i] << "\t" << rec_text_score[i]
               << std::endl;
   }
+  std::cout << "初始化花费了"
+            << double(duration_init.count()) *
+                   std::chrono::microseconds::period::num /
+                   std::chrono::microseconds::period::den
+            << "秒" << std::endl;
+  std::cout << "加载模型花费了"
+            << double(duration_load_model.count()) *
+                   std::chrono::microseconds::period::num /
+                   std::chrono::microseconds::period::den
+            << "秒" << std::endl;
+  std::cout << "加载图片花费了"
+            << double(duration_load_imgs.count()) *
+                   std::chrono::microseconds::period::num /
+                   std::chrono::microseconds::period::den
+            << "秒" << std::endl;
+  std::cout << "运行检测模型花费了"
+            << double(duration_RunDetModel.count()) *
+                   std::chrono::microseconds::period::num /
+                   std::chrono::microseconds::period::den
+            << "秒" << std::endl;
+  std::cout << "运行识别模型花费了"
+            << double(duration_RunRecModel.count()) *
+                   std::chrono::microseconds::period::num /
+                   std::chrono::microseconds::period::den
+            << "秒" << std::endl;
 
-  std::cout << "花费了"
+  std::cout << "总共花费了"
             << double(duration.count()) *
                    std::chrono::microseconds::period::num /
                    std::chrono::microseconds::period::den
