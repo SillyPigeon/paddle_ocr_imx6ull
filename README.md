@@ -1,22 +1,24 @@
-# paddle_ocr_imx6ull
+# paddle_ocr_imx6ull(版本v0.2)
 ## 1、简介
 
 此项目是参考文档: https://blog.csdn.net/qq_39056987/article/details/121078743
-编译移植到正点原子的nxp im6ull linux板卡的paddle ocr demo工程
+制作目标应用于工业摄像头的项目
 
 **注意：项目收集于互联网，若用于商用，请联系代码原作者。**
 
 ## 2、文件目录说明
 
-#### 2.1  根目录
-
-存放demo相关源文件和头文件 -- *.cpp  *.hpp  *.cc *.h
+#### 2.1 根目录
 
 编译脚本文件 -- build.sh
 
 CMake编译配置文件 -- CMakeLists.txt
 
-#### 2.2  编译依赖库目录 --cxx/
+#### 2.2  OCR工程源码文件夹 --src --include
+
+存放OCR识别相关操作源文件和头文件 -- *.cpp  *.hpp  *.cc *.h
+
+#### 2.3  OCR依赖库目录 --ocr_lib/
 
 Paddle Lite 环境运行库头文件(api 头文件) -- /include
 
@@ -24,7 +26,11 @@ Paddle OCR 运行依赖的paddle相关动态库  -- /lib
 
 Paddle OCR 运行依赖的opencv相关动态库  -- /opencv-linux-armv7hf
 
-#### 2.3  训练模型相关的文件目录 --model /
+#### 2.4 摄像头相关代码目录 --camera
+
+内含v4l2标准的代码实现，获取调用通用linux摄像头
+
+#### 2.5  训练模型相关的文件目录 --model /
 
 Paddle Lite 模型 -- *.nb
 

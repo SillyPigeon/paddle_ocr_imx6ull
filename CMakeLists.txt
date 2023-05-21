@@ -1,5 +1,9 @@
 cmake_minimum_required(VERSION 2.8)
 
+message("/***************Version Info****************/")
+message("Current OCR proj code Version is v0.2")
+message("/******************************************/")
+
 #1.config compiler
 set(CMAKE_SYSTEM_PROCESSOR arm)
 set(CMAKE_C_COMPILER "arm-linux-gnueabihf-gcc")
