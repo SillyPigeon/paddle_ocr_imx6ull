@@ -9,34 +9,10 @@
  日志 : SillyPigeon edit from 初版 V1.0 2021/7/09 邓涛创建
  ***************************************************************/
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <sys/ioctl.h>
-#include <string.h>
-#include <errno.h>
-#include <sys/mman.h>
-#include <linux/videodev2.h>
-#include <linux/fb.h>
-#include <jpeglib.h>
+#include "v4l2_camera.h"
 
 #define FB_DEV              "/dev/fb0"      //LCD设备节点
 #define FRAMEBUFFER_COUNT   3               //帧缓冲数量
-
-/*** 摄像头像素格式及其描述信息 ***/
-typedef struct camera_format {
-    unsigned char description[32];  //字符串描述信息
-    unsigned int pixelformat;       //像素格式
-} cam_fmt;
-
-/*** 描述一个帧缓冲的信息 ***/
-typedef struct cam_buf_info {
-    unsigned short *start;      //帧缓冲起始地址
-    unsigned long length;       //帧缓冲长度
-} cam_buf_info;
 
 static int width;                       //LCD宽度
 static int height;                      //LCD高度
@@ -47,7 +23,7 @@ static cam_buf_info buf_infos[FRAMEBUFFER_COUNT];
 static cam_fmt cam_fmts[10];
 static int frm_width, frm_height;   //视频帧宽度和高度
 
-static int fb_dev_init(void)
+int fb_dev_init(void)
 {
     struct fb_var_screeninfo fb_var = {0};
     struct fb_fix_screeninfo fb_fix = {0};
@@ -81,7 +57,7 @@ static int fb_dev_init(void)
     return 0;
 }
 
-static int v4l2_dev_init(const char *device)
+int v4l2_dev_init(const char *device)
 {
     struct v4l2_capability cap = {0};
 
@@ -105,7 +81,7 @@ static int v4l2_dev_init(const char *device)
     return 0;
 }
 
-static void v4l2_enum_formats(void)
+void v4l2_enum_formats(void)
 {
     struct v4l2_fmtdesc fmtdesc = {0};
 
@@ -121,7 +97,7 @@ static void v4l2_enum_formats(void)
     }
 }
 
-static void v4l2_print_formats(void)
+void v4l2_print_formats(void)
 {
     struct v4l2_frmsizeenum frmsize = {0};
     struct v4l2_frmivalenum frmival = {0};
@@ -161,7 +137,7 @@ static void v4l2_print_formats(void)
     }
 }
 
-static int v4l2_set_format(void)
+int v4l2_set_format(void)
 {
     struct v4l2_format fmt = {0};
     struct v4l2_streamparm streamparm = {0};
@@ -176,16 +152,9 @@ static int v4l2_set_format(void)
         return -1;
     }
 
-    /*** 判断是否已经设置为我们要求的RGB565像素格式
-    如果没有设置成功表示该设备不支持RGB565像素格式 */
-    //if (V4L2_PIX_FMT_RGB565 != fmt.fmt.pix.pixelformat) {
-    //    fprintf(stderr, "Error: the device does not support RGB565 format!\n");
-    //    return -1;
-    //}
-
     frm_width = fmt.fmt.pix.width;  //获取实际的帧宽度
     frm_height = fmt.fmt.pix.height;//获取实际的帧高度
-    printf("视频帧大小<%d * %d>\n", frm_width, frm_height);
+    printf("设置捕获设备视频帧大小<%d * %d>\n", frm_width, frm_height);
 
     /* 获取streamparm */
     streamparm.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
@@ -204,7 +173,7 @@ static int v4l2_set_format(void)
     return 0;
 }
 
-static int v4l2_init_buffer(void)
+int v4l2_init_buffer(void)
 {
     struct v4l2_requestbuffers reqbuf = {0};
     struct v4l2_buffer buf = {0};
@@ -246,7 +215,7 @@ static int v4l2_init_buffer(void)
     return 0;
 }
 
-static int v4l2_stream_on(void)
+int v4l2_stream_on(void)
 {
     /* 打开摄像头、摄像头开始采集数据 */
     enum v4l2_buf_type type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
@@ -256,10 +225,12 @@ static int v4l2_stream_on(void)
         return -1;
     }
 
+    printf("摄像头开始采集数据。");
+
     return 0;
 }
 
-static void v4l2_read_data(void)
+void v4l2_read_data(void)
 {
     struct v4l2_buffer readbuffer = {0};
     unsigned short *base;
@@ -267,9 +238,6 @@ static void v4l2_read_data(void)
     int min_w, min_h;
     char filename[20] = "";
     int  file_index = 0;
-
-    struct jpeg_error_mgr jerr;
-    struct jpeg_decompress_struct cinfo;
 
     if (width > frm_width)
         min_w = frm_width;
@@ -302,44 +270,45 @@ static void v4l2_read_data(void)
     ioctl(v4l2_fd,VIDIOC_STREAMOFF,&readbuffer.type);
 }
 
-int main(int argc, char *argv[])
-{
-    if (2 != argc) {
-        fprintf(stderr, "Usage: %s <video_dev>\n", argv[0]);
-        exit(EXIT_FAILURE);
-    }
+// 摄像头单独测试代码
+// int main(int argc, char *argv[])
+// {
+//     if (2 != argc) {
+//         fprintf(stderr, "Usage: %s <video_dev>\n", argv[0]);
+//         exit(EXIT_FAILURE);
+//     }
 
-    /* 初始化LCD */
-    if (fb_dev_init())
-        exit(EXIT_FAILURE);
+//     /* 初始化LCD */
+//     if (fb_dev_init())
+//         exit(EXIT_FAILURE);
 
-    /* 初始化摄像头 */
-    if (v4l2_dev_init(argv[1]))
-        exit(EXIT_FAILURE);
+//     /* 初始化摄像头 */
+//     if (v4l2_dev_init(argv[1]))
+//         exit(EXIT_FAILURE);
 
-    /* 枚举所有格式并打印摄像头支持的分辨率及帧率 */
-    v4l2_enum_formats();
-    v4l2_print_formats();
+//     /* 枚举所有格式并打印摄像头支持的分辨率及帧率 */
+//     v4l2_enum_formats();
+//     v4l2_print_formats();
 
-    /* 设置格式 */
-    if (v4l2_set_format())
-        exit(EXIT_FAILURE);
+//     /* 设置格式 */
+//     if (v4l2_set_format())
+//         exit(EXIT_FAILURE);
 
-    /* 初始化帧缓冲：申请、内存映射、入队 */
-    if (v4l2_init_buffer())
-        exit(EXIT_FAILURE);
+//     /* 初始化帧缓冲：申请、内存映射、入队 */
+//     if (v4l2_init_buffer())
+//         exit(EXIT_FAILURE);
 
-    /* 开启视频采集 */
-    if (v4l2_stream_on())
-        exit(EXIT_FAILURE);
+//     /* 开启视频采集 */
+//     if (v4l2_stream_on())
+//         exit(EXIT_FAILURE);
 
-    /* 读取数据：出队 */
-    v4l2_read_data();       //在函数内循环采集数据、将其显示到LCD屏
+//     /* 读取数据：出队 */
+//     v4l2_read_data();       //在函数内循环采集数据、将其显示到LCD屏
 
-    //退出程序
-    for (int i=0; i < FRAMEBUFFER_COUNT; i++) {
-        munmap(buf_infos[i].start, buf_infos[i].length);
-    }
-    close(v4l2_fd);
-    exit(EXIT_SUCCESS);
-}
+//     //退出程序
+//     for (int i=0; i < FRAMEBUFFER_COUNT; i++) {
+//         munmap(buf_infos[i].start, buf_infos[i].length);
+//     }
+//     close(v4l2_fd);
+//     exit(EXIT_SUCCESS);
+// }

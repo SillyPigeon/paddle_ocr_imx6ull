@@ -23,7 +23,7 @@ set(OpenMP_pthread_LIBRARY "/usr/arm-linux-gnueabihf/lib/libpthread.so")
 set(ARMLINUX_ARCH_ABI armv7hf)
 
 #4. path to Paddle-Lite lib
-set(LITE_DIR "${CMAKE_SOURCE_DIR}/cxx")
+set(LITE_DIR "${CMAKE_SOURCE_DIR}/ocr_lib")
 
 #5. link Paddle-Lite directory
 link_directories(${LITE_DIR}/lib)
@@ -42,10 +42,20 @@ endif()
 set(OpenCV_DIR ${LITE_DIR}/opencv-linux-armv7hf/share/OpenCV)
 find_package(OpenCV REQUIRED)
 
+#8.set camera files 
+include_directories(${CMAKE_SOURCE_DIR}/camera/include)
+file(GLOB_RECURSE CAMERA_SRC_LIST "${CMAKE_SOURCE_DIR}/camera/*.cpp" "${CMAKE_SOURCE_DIR}/camera/*.c") 
+message(STATUS "CAMERA_SRC_LIST = ${CAMERA_SRC_LIST}")     
+
+#9.set ocr files
+include_directories(${CMAKE_SOURCE_DIR}/include)
+file(GLOB_RECURSE OCR_SRC_LIST "${CMAKE_SOURCE_DIR}/src/*.cpp" "${CMAKE_SOURCE_DIR}/src/*.cc" "${CMAKE_SOURCE_DIR}/src/*.c") 
+message(STATUS "OCR_SRC_LIST = ${OCR_SRC_LIST}")     
+
 set(CMAKE_CXX_STANDARD 14)
 
-#8.add executable output
-add_executable(${TARGET} ocr_db_crnn.cc cls_process.cc db_post_process.cc crnn_process.cc clipper.cpp)
+#10.add executable output
+add_executable(${TARGET} ${OCR_SRC_LIST} ${CAMERA_SRC_LIST})
 target_link_libraries(${TARGET} -lpaddle_light_api_shared ${OpenCV_LIBS})
 target_link_libraries(${TARGET} -ldl)
 

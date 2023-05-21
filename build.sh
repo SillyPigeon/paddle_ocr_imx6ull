@@ -1,10 +1,12 @@
 #!/bin/bash
-
 set -e
 
+if [ $1 == clean ]; then
+rm -rf ./build
+rm -rf ./install
+else
 # for your board compiler
 #GCC_COMPILER=/usr/local/arm/gcc-linaro-4.9.4-2017.01-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf
-
 ROOT_PWD=$( cd "$( dirname $0 )" && cd -P "$( dirname "$SOURCE" )" && pwd )
 
 # build rockx
@@ -21,3 +23,4 @@ cmake .. #\
 make -j4
 make install
 cd -
+fi
