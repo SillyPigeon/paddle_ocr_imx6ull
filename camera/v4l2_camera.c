@@ -1,12 +1,12 @@
 /***************************************************************
  Copyright © ALIENTEK Co., Ltd. 1998-2021. All rights reserved.
  文件名 : v4l2_camera.c
- 作者 : 邓涛
- 版本 : V1.0
+ 作者 : SillyPigeon edit from 邓涛
+ 版本 : V1.1
  描述 : V4L2摄像头应用编程实战
  其他 : 无
  论坛 : www.openedv.com
- 日志 : 初版 V1.0 2021/7/09 邓涛创建
+ 日志 : SillyPigeon edit from 初版 V1.0 2021/7/09 邓涛创建
  ***************************************************************/
 
 #include <stdio.h>
@@ -21,6 +21,7 @@
 #include <sys/mman.h>
 #include <linux/videodev2.h>
 #include <linux/fb.h>
+#include <jpeglib.h>
 
 #define FB_DEV              "/dev/fb0"      //LCD设备节点
 #define FRAMEBUFFER_COUNT   3               //帧缓冲数量
@@ -167,9 +168,9 @@ static int v4l2_set_format(void)
 
     /* 设置帧格式 */
     fmt.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;//type类型
-    fmt.fmt.pix.width = width;  //视频帧宽度
-    fmt.fmt.pix.height = height;//视频帧高度
-    fmt.fmt.pix.pixelformat = V4L2_PIX_FMT_YUYV;  //像素格式
+    fmt.fmt.pix.width = 1920;  //视频帧宽度
+    fmt.fmt.pix.height = 1080;//视频帧高度
+    fmt.fmt.pix.pixelformat = V4L2_PIX_FMT_MJPEG;  //像素格式
     if (0 > ioctl(v4l2_fd, VIDIOC_S_FMT, &fmt)) {
         fprintf(stderr, "ioctl error: VIDIOC_S_FMT: %s\n", strerror(errno));
         return -1;
@@ -260,12 +261,15 @@ static int v4l2_stream_on(void)
 
 static void v4l2_read_data(void)
 {
-    struct v4l2_buffer buf = {0};
+    struct v4l2_buffer readbuffer = {0};
     unsigned short *base;
     unsigned short *start;
-    unsigned short *rgbStart = malloc((frm_width * frm_height /2) * sizeof(unsigned short));
     int min_w, min_h;
-    int j;
+    char filename[20] = "";
+    int  file_index = 0;
+
+    struct jpeg_error_mgr jerr;
+    struct jpeg_decompress_struct cinfo;
 
     if (width > frm_width)
         min_w = frm_width;
@@ -276,24 +280,26 @@ static void v4l2_read_data(void)
     else
         min_h = height;
 
-    buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-    buf.memory = V4L2_MEMORY_MMAP;
-    for ( ; ; ) {
-
-        for(buf.index = 0; buf.index < FRAMEBUFFER_COUNT; buf.index++) {
-
-            ioctl(v4l2_fd, VIDIOC_DQBUF, &buf);     //出队
-            for (j = 0, base=screen_base, start=buf_infos[buf.index].start;
-                        j < min_h; j++) {
-                memcpy(base, start, min_w * 2); //RGB565 一个像素占2个字节
-                base += width;  //LCD显示指向下一行
-                start += frm_width;//指向下一行数据
-            }
-            // 数据处理完之后、再入队、往复
-            ioctl(v4l2_fd, VIDIOC_QBUF, &buf);
+    readbuffer.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+    readbuffer.memory = V4L2_MEMORY_MMAP;
+    for (int i = 0; i < 3; ++i)
+    {
+        for (readbuffer.index = 0; readbuffer.index < FRAMEBUFFER_COUNT; readbuffer.index++, file_index++)
+        {
+            //出队列
+            ioctl(v4l2_fd, VIDIOC_DQBUF, &readbuffer);
+            //存储图片
+            sprintf(filename, "test_%d.jpg", file_index);
+            FILE *file=fopen(filename, "w");  //打开一个文件
+            fwrite( buf_infos[readbuffer.index].start, readbuffer.length, 1, file);//写入文件
+            fclose(file);    //写入完成，关闭文件
+            // 数据处理完之后、再入队、往复, 从内核取出后需要放回(释放)
+            ioctl(v4l2_fd, VIDIOC_QBUF, &readbuffer);
         }
     }
-    free(rgbStart);
+
+    //停止采集
+    ioctl(v4l2_fd,VIDIOC_STREAMOFF,&readbuffer.type);
 }
 
 int main(int argc, char *argv[])
@@ -330,5 +336,10 @@ int main(int argc, char *argv[])
     /* 读取数据：出队 */
     v4l2_read_data();       //在函数内循环采集数据、将其显示到LCD屏
 
+    //退出程序
+    for (int i=0; i < FRAMEBUFFER_COUNT; i++) {
+        munmap(buf_infos[i].start, buf_infos[i].length);
+    }
+    close(v4l2_fd);
     exit(EXIT_SUCCESS);
 }
