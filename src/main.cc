@@ -15,13 +15,19 @@
 #include "paddle_api.h" // NOLINT
 #include <chrono>
 #include <arm_neon.h>
+#include <signal.h>
 
 #include "cls_process.h"
 #include "crnn_process.h"
 #include "db_post_process.h"
 
+#include "v4l2_camera.h"
+
 using namespace paddle::lite_api; // NOLINT
 using namespace std;
+
+std::chrono::time_point<std::chrono::system_clock> start_time, end_init, end_load_imgs, end_load_model, \
+                                                   end_RunDetModel, end_time;
 
 // fill tensor with mean and scale and trans layout: nhwc -> nchw, neon speed up
 void NeonMeanScale(const float *din, float *dout, int size,
@@ -355,54 +361,34 @@ std::map<std::string, double> LoadConfigTxt(std::string config_path) {
   return dict;
 }
 
-int main(int argc, char **argv) {
-  if (argc < 5) {
-    std::cerr << "[ERROR] usage: " << argv[0]
-              << " det_model_file cls_model_file rec_model_file image_path "
-                 "charactor_dict\n";
-    exit(1);
+static int init_camera(const char* device)
+{
+  /* 初始化摄像头 */
+  if (v4l2_dev_init(device)){
+      return -1;
   }
-  std::string det_model_file = argv[1];
-  std::string rec_model_file = argv[2];
-  std::string cls_model_file = argv[3];
-  std::string img_path = argv[4];
-  std::string dict_path = argv[5];
 
-  auto start = std::chrono::system_clock::now();
-  //// load config from txt file
-  auto Config = LoadConfigTxt("./config.txt");
-  int use_direction_classify = int(Config["use_direction_classify"]);
+  /* 设置格式 */
+  if (v4l2_set_format()){
+      return -1;
+  }
 
-  auto end_init = std::chrono::system_clock::now();
+  /* 初始化帧缓冲：申请、内存映射、入队 */
+  if (v4l2_init_buffer()){
+      return -1;
+  }
 
-  auto det_predictor = loadModel(det_model_file);
-  auto rec_predictor = loadModel(rec_model_file);
-  auto cls_predictor = loadModel(cls_model_file);
+  /* 开启视频采集 */
+  if (v4l2_stream_on()){
+      return -1;
+  }
 
-  auto end_load_model = std::chrono::system_clock::now();
+  return 0;
+}
 
-  auto charactor_dict = ReadDict(dict_path);
-  charactor_dict.insert(charactor_dict.begin(), "#"); // blank char for ctc
-  charactor_dict.push_back(" ");
-
-  cv::Mat srcimg = cv::imread(img_path, cv::IMREAD_COLOR);
-
-  auto end_load_imgs = std::chrono::system_clock::now();
-
-  auto boxes = RunDetModel(det_predictor, srcimg, Config);
-
-  std::vector<std::string> rec_text;
-  std::vector<float> rec_text_score;
-
-  auto end_RunDetModel = std::chrono::system_clock::now();
-
-  RunRecModel(boxes, srcimg, rec_predictor, rec_text, rec_text_score,
-              charactor_dict, cls_predictor, use_direction_classify);
-
-  auto end = std::chrono::system_clock::now();
-
+static void showDebugTimeInfo(void){
   auto duration_init =
-      std::chrono::duration_cast<std::chrono::microseconds>(end_init - start);
+      std::chrono::duration_cast<std::chrono::microseconds>(end_init - start_time);
 
   auto duration_load_model =
       std::chrono::duration_cast<std::chrono::microseconds>(end_load_model - end_init);
@@ -414,19 +400,11 @@ int main(int argc, char **argv) {
       std::chrono::duration_cast<std::chrono::microseconds>(end_RunDetModel - end_load_imgs);
 
   auto duration_RunRecModel =
-      std::chrono::duration_cast<std::chrono::microseconds>(end - end_RunDetModel);
+      std::chrono::duration_cast<std::chrono::microseconds>(end_time - end_RunDetModel);
 
   auto duration =
-      std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+      std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time);
 
-  //// visualization
-  auto img_vis = Visualization(srcimg, boxes);
-
-  //// print recognized text
-  for (int i = 0; i < rec_text.size(); i++) {
-    std::cout << i << "\t" << rec_text[i] << "\t" << rec_text_score[i]
-              << std::endl;
-  }
   std::cout << "初始化花费了"
             << double(duration_init.count()) *
                    std::chrono::microseconds::period::num /
@@ -458,6 +436,94 @@ int main(int argc, char **argv) {
                    std::chrono::microseconds::period::num /
                    std::chrono::microseconds::period::den
             << "秒" << std::endl;
+}
 
-  return 0;
+//进程退出处理，程序调用 exit 或 main函数return 或 最后一个线程正常退出
+void signalHandle(int sig)
+{
+    //handle
+    std::cerr << "[WARNING] progress exit\n";
+    v4l2_off();
+}
+
+void exitHandle(void)
+{
+    //handle
+    std::cerr << "[WARNING] progress exit\n";
+    v4l2_off();
+}
+
+int main(int argc, char **argv) {
+  if (argc < 4) {
+    std::cerr << "[ERROR] usage: " << argv[0]
+              << " det_model_file cls_model_file rec_model_file camera_device \n";
+    exit(EXIT_FAILURE);
+  }
+  std::string det_model_file = argv[1];
+  std::string rec_model_file = argv[2];
+  std::string cls_model_file = argv[3];
+  char* camera_device = argv[4];
+  std::string dict_path = "./ppocr_keys_v1.txt";
+  std::string img_path = "./test.jpg";
+
+  if (init_camera(camera_device))
+  {
+    std::cerr << "[ERROR] init_camera\n";
+    exit(EXIT_FAILURE);
+  }
+
+  signal(SIGINT, signalHandle);
+  signal(SIGTSTP, signalHandle);
+  atexit(exitHandle);
+
+  while(1){
+    //采集数据, 在当前路径生成图片
+    v4l2_get_data();       
+
+    start_time = std::chrono::system_clock::now();
+    //// load config from txt file
+    auto Config = LoadConfigTxt("./config.txt");
+    int use_direction_classify = int(Config["use_direction_classify"]);
+
+    end_init = std::chrono::system_clock::now();
+
+    auto det_predictor = loadModel(det_model_file);
+    auto rec_predictor = loadModel(rec_model_file);
+    auto cls_predictor = loadModel(cls_model_file);
+
+    end_load_model = std::chrono::system_clock::now();
+
+    auto charactor_dict = ReadDict(dict_path);
+    charactor_dict.insert(charactor_dict.begin(), "#"); // blank char for ctc
+    charactor_dict.push_back(" ");
+
+    cv::Mat srcimg = cv::imread(img_path, cv::IMREAD_COLOR);
+
+    end_load_imgs = std::chrono::system_clock::now();
+
+    auto boxes = RunDetModel(det_predictor, srcimg, Config);
+
+    std::vector<std::string> rec_text;
+    std::vector<float> rec_text_score;
+
+    end_RunDetModel = std::chrono::system_clock::now();
+
+    RunRecModel(boxes, srcimg, rec_predictor, rec_text, rec_text_score,
+                charactor_dict, cls_predictor, use_direction_classify);
+
+    end_time = std::chrono::system_clock::now();
+
+    //// visualization
+    auto img_vis = Visualization(srcimg, boxes);
+
+    //// print recognized text
+    for (int i = 0; i < rec_text.size(); i++) {
+      std::cout << i << "\t" << rec_text[i] << "\t" << rec_text_score[i]
+                << std::endl;
+    }
+
+    showDebugTimeInfo();
+  }
+  //exit code
+  exit(EXIT_SUCCESS);
 }

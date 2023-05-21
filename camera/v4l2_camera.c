@@ -12,7 +12,7 @@
 #include "v4l2_camera.h"
 
 #define FB_DEV              "/dev/fb0"      //LCD设备节点
-#define FRAMEBUFFER_COUNT   3               //帧缓冲数量
+#define FRAMEBUFFER_COUNT   1               //帧缓冲数量
 
 static int width;                       //LCD宽度
 static int height;                      //LCD高度
@@ -225,12 +225,12 @@ int v4l2_stream_on(void)
         return -1;
     }
 
-    printf("摄像头开始采集数据。");
+    printf("摄像头开始采集数据。\n");
 
     return 0;
 }
 
-void v4l2_read_data(void)
+void v4l2_get_data(void)
 {
     struct v4l2_buffer readbuffer = {0};
     unsigned short *base;
@@ -250,14 +250,15 @@ void v4l2_read_data(void)
 
     readbuffer.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
     readbuffer.memory = V4L2_MEMORY_MMAP;
-    for (int i = 0; i < 3; ++i)
+    //for (int i = 0; i < 2; ++i)
     {
         for (readbuffer.index = 0; readbuffer.index < FRAMEBUFFER_COUNT; readbuffer.index++, file_index++)
         {
             //出队列
             ioctl(v4l2_fd, VIDIOC_DQBUF, &readbuffer);
             //存储图片
-            sprintf(filename, "test_%d.jpg", file_index);
+            sprintf(filename, "test.jpg");
+            //sprintf(filename, "test_%d.jpg", file_index);
             FILE *file=fopen(filename, "w");  //打开一个文件
             fwrite( buf_infos[readbuffer.index].start, readbuffer.length, 1, file);//写入文件
             fclose(file);    //写入完成，关闭文件
@@ -265,9 +266,17 @@ void v4l2_read_data(void)
             ioctl(v4l2_fd, VIDIOC_QBUF, &readbuffer);
         }
     }
+}
 
+void v4l2_off(void)
+{
+    int type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
     //停止采集
-    ioctl(v4l2_fd,VIDIOC_STREAMOFF,&readbuffer.type);
+    ioctl(v4l2_fd,VIDIOC_STREAMOFF,&type);
+    for (int i=0; i < FRAMEBUFFER_COUNT; i++) {
+        munmap(buf_infos[i].start, buf_infos[i].length);
+    }
+    close(v4l2_fd);
 }
 
 // 摄像头单独测试代码

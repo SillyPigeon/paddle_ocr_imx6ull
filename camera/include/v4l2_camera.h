@@ -21,7 +21,9 @@
 #include <sys/mman.h>
 #include <linux/videodev2.h>
 #include <linux/fb.h>
-
+#ifdef __cplusplus
+extern "C"{
+#endif
 /*** 摄像头像素格式及其描述信息 ***/
 typedef struct camera_format {
     unsigned char description[32];  //字符串描述信息
@@ -33,6 +35,7 @@ typedef struct cam_buf_info {
     unsigned short *start;      //帧缓冲起始地址
     unsigned long length;       //帧缓冲长度
 } cam_buf_info;
+
 
 int fb_dev_init(void);
 
@@ -48,4 +51,9 @@ int v4l2_init_buffer(void);
 
 int v4l2_stream_on(void);
 
-void v4l2_read_data(void);
+void v4l2_off(void);
+
+void v4l2_get_data(void);
+#ifdef __cplusplus
+}
+#endif
