@@ -53,7 +53,7 @@ int v4l2_stream_on(void);
 
 void v4l2_off(void);
 
-void v4l2_get_data(void);
+void v4l2_capture_one_frame(const char* savePath);
 
 int init_camera(const char* device);
 #ifdef __cplusplus

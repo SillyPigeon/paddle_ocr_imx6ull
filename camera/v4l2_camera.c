@@ -230,13 +230,12 @@ int v4l2_stream_on(void)
     return 0;
 }
 
-void v4l2_get_data(void)
+void v4l2_capture_one_frame(const char* savePath)
 {
     struct v4l2_buffer readbuffer = {0};
     unsigned short *base;
     unsigned short *start;
     int min_w, min_h;
-    char filename[20] = "";
     int  file_index = 0;
 
     if (width > frm_width)
@@ -257,9 +256,9 @@ void v4l2_get_data(void)
             //出队列
             ioctl(v4l2_fd, VIDIOC_DQBUF, &readbuffer);
             //存储图片
-            sprintf(filename, "test.jpg");
+            //sprintf(filename, "test.jpg");
             //sprintf(filename, "test_%d.jpg", file_index);
-            FILE *file=fopen(filename, "w");  //打开一个文件
+            FILE *file=fopen(savePath, "w");  //打开一个文件
             fwrite( buf_infos[readbuffer.index].start, readbuffer.length, 1, file);//写入文件
             fclose(file);    //写入完成，关闭文件
             // 数据处理完之后、再入队、往复, 从内核取出后需要放回(释放)

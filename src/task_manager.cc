@@ -14,6 +14,8 @@
 
 #include "task_manager.h"
 
+#define MAX_CAPTURE_SIZE        10
+
 using namespace paddle::lite_api; // NOLINT
 using namespace std;
 
@@ -21,6 +23,11 @@ std::chrono::time_point<std::chrono::system_clock> start_time, end_init, \
                                                    end_load_imgs, end_load_model, \
                                                    end_RunDetModel, end_time;
 
+pthread_t capture_thread_id;
+pthread_t ocr_thread_id;
+pthread_mutex_t gCapQueueMutex = PTHREAD_MUTEX_INITIALIZER;
+queue<CaptureElement> captureQueue;
+OcrTaskArgs gOcrArgs;
 
 // fill tensor with mean and scale and trans layout: nhwc -> nchw, neon speed up
 void NeonMeanScale(const float *din, float *dout, int size,
@@ -406,65 +413,128 @@ static void showDebugTimeInfo(void){
             << "秒" << std::endl;
 }
 
-
-
-void startCaptureTask(void){
-	v4l2_get_data();
+void initOcrArgs(std::string det_model_file, std::string rec_model_file,
+                std::string cls_model_file, std::string dict_path){
+    gOcrArgs.det_model_file = det_model_file;
+    gOcrArgs.rec_model_file = rec_model_file;
+    gOcrArgs.cls_model_file = cls_model_file;
+    gOcrArgs.dict_path = dict_path;
 }
 
-void startOcrTask(std::string det_model_file,
-				  std::string rec_model_file,
-				  std::string cls_model_file,
-				  std::string dict_path,
-				  std::string img_path){
+void* ocrTask(void* arg)
+{
+    char savePath[MAX_CAPTURE_FILE_NAME_LENGTH] = "";
+    while(1)
+    {   
+        //check queue start
+        pthread_mutex_lock(&gCapQueueMutex);//[LOCK]
+        if (captureQueue.empty()){
+          pthread_mutex_unlock(&gCapQueueMutex);//[UNLOCK]
+          continue;
+        }
 
-	start_time = std::chrono::system_clock::now();
-	//// load config from txt file
-	auto Config = LoadConfigTxt("./config.txt");
-	int use_direction_classify = int(Config["use_direction_classify"]);
+        CaptureElement element = captureQueue.front();
+        memcpy(savePath, element.savePath, sizeof(savePath));
+        captureQueue.pop();
+        pthread_mutex_unlock(&gCapQueueMutex);//[UNLOCK]
+        //check queue end
 
-	end_init = std::chrono::system_clock::now();
+        std::string img_path = savePath;
+        std::cout << "[DEBUG] ocr check img_path: " << img_path <<std::endl;
+        start_time = std::chrono::system_clock::now();//[debug]
+        //// load config from txt file
+        auto Config = LoadConfigTxt("./config.txt");
+        int use_direction_classify = int(Config["use_direction_classify"]);
 
-	auto det_predictor = loadModel(det_model_file);
-	auto rec_predictor = loadModel(rec_model_file);
-	auto cls_predictor = loadModel(cls_model_file);
+        end_init = std::chrono::system_clock::now();//[debug]
 
-	end_load_model = std::chrono::system_clock::now();
+        auto det_predictor = loadModel(gOcrArgs.det_model_file);
+        auto rec_predictor = loadModel(gOcrArgs.rec_model_file);
+        auto cls_predictor = loadModel(gOcrArgs.cls_model_file);
 
-	auto charactor_dict = ReadDict(dict_path);
-	charactor_dict.insert(charactor_dict.begin(), "#"); // blank char for ctc
-	charactor_dict.push_back(" ");
+        end_load_model = std::chrono::system_clock::now();//[debug]
 
-	cv::Mat srcimg = cv::imread(img_path, cv::IMREAD_COLOR);
+        auto charactor_dict = ReadDict(gOcrArgs.dict_path);
+        charactor_dict.insert(charactor_dict.begin(), "#"); // blank char for ctc
+        charactor_dict.push_back(" ");
 
-	end_load_imgs = std::chrono::system_clock::now();
+        cv::Mat srcimg = cv::imread(img_path, cv::IMREAD_COLOR);
 
-	auto boxes = RunDetModel(det_predictor, srcimg, Config);
+        end_load_imgs = std::chrono::system_clock::now();//[debug]
 
-	std::vector<std::string> rec_text;
-	std::vector<float> rec_text_score;
+        auto boxes = RunDetModel(det_predictor, srcimg, Config);
 
-	end_RunDetModel = std::chrono::system_clock::now();
+        std::vector<std::string> rec_text;
+        std::vector<float> rec_text_score;
 
-	RunRecModel(boxes, srcimg, rec_predictor, rec_text, rec_text_score,
-	            charactor_dict, cls_predictor, use_direction_classify);
+        end_RunDetModel = std::chrono::system_clock::now();//[debug]
 
-	end_time = std::chrono::system_clock::now();
+        RunRecModel(boxes, srcimg, rec_predictor, rec_text, rec_text_score,
+                    charactor_dict, cls_predictor, use_direction_classify);
 
-	//// visualization
-	auto img_vis = Visualization(srcimg, boxes);
+        end_time = std::chrono::system_clock::now();//[debug]
+        // debug info
+        auto img_vis = Visualization(srcimg, boxes);
+        for (int i = 0; i < rec_text.size(); i++) {
+          std::cout << i << "\t" << rec_text[i] << "\t" << rec_text_score[i]
+                    << std::endl;
+        }
+        showDebugTimeInfo();
+    }
+    return NULL;
+}
 
-	//// print recognized text
-	for (int i = 0; i < rec_text.size(); i++) {
-	  std::cout << i << "\t" << rec_text[i] << "\t" << rec_text_score[i]
-	            << std::endl;
-	}
+void* captureTask(void* arg)
+{
+    char savePath[MAX_CAPTURE_FILE_NAME_LENGTH] = "";
+    while(1)
+    {
+        //check queue start
+        pthread_mutex_lock(&gCapQueueMutex);//[LOCK]
+        if (captureQueue.size() >= MAX_CAPTURE_SIZE){
+          pthread_mutex_unlock(&gCapQueueMutex);//[UNLOCK]
+          continue;
+        }
+        
+        unsigned int new_index = 0;
+        if (!captureQueue.empty()){
+          memset(savePath, 0, sizeof(savePath));
+          auto last_element = captureQueue.back();
+          new_index = last_element.index + 1;
+          if (new_index >= MAX_CAPTURE_SIZE)//假的循环队列
+          {
+              new_index = 0;
+          }
+        }
+        sprintf(savePath, "test_%d.jpg", new_index);
+        auto element = CaptureElement(savePath, new_index);
+        captureQueue.push(element);
+        //save picture
+        v4l2_capture_one_frame(savePath);
+        pthread_mutex_unlock(&gCapQueueMutex);//[UNLOCK]
+    }
+    return NULL;
+}
 
-	showDebugTimeInfo();
+void startCaptureTask(void){
+    if(pthread_create(&capture_thread_id, NULL, captureTask, NULL))
+    {
+        std::cout << "[ERROR] CaptureTask CAN not start" << std::endl;
+        return;
+    }
+}
+
+void startOcrTask(void){
+    if(pthread_create(&ocr_thread_id, NULL, ocrTask, NULL))
+    {
+        std::cout << "[ERROR] OcrTask CAN not start" << std::endl;
+        return;
+    }
 }
 
 
 void loopTask(void)
 {
-	while(1);
+    pthread_join(capture_thread_id, NULL);
+    pthread_join(ocr_thread_id, NULL);
 }

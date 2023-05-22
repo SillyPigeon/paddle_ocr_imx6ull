@@ -17,16 +17,37 @@
 #include <arm_neon.h>
 #include <signal.h>
 #include <pthread.h>
+#include <queue>
 #include "cls_process.h"
 #include "crnn_process.h"
 #include "db_post_process.h"
 #include "v4l2_camera.h"
 #include "paddle_api.h" // NOLINT
 
+#define MAX_CAPTURE_FILE_NAME_LENGTH   20
+#define MAX_CONFIG_FILE_NAME_LENGTH    50
+
+class OcrTaskArgs {
+  public:
+    std::string det_model_file;
+    std::string rec_model_file;
+    std::string cls_model_file;
+    std::string dict_path;
+};
+
+class CaptureElement {
+  public:
+    char savePath[MAX_CAPTURE_FILE_NAME_LENGTH];   //字符串描述信息
+    unsigned int index;  //像素格式
+  CaptureElement(const char* filename, unsigned int id){
+  	memcpy(savePath, filename, sizeof(savePath));
+  	index = id;
+  }
+};
+
+
+void initOcrArgs(std::string det_model_file, std::string rec_model_file,
+				 std::string cls_model_file, std::string dict_path);
+void startOcrTask(void);
 void startCaptureTask(void);
-
-void startOcrTask(std::string det_model_file, std::string rec_model_file,
-				  std::string cls_model_file, std::string dict_path,
-				  std::string img_path);
-
 void loopTask(void);

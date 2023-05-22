@@ -36,12 +36,12 @@ int main(int argc, char **argv) {
     exit(EXIT_FAILURE);
   }
 
-  //获取参数
+  //设置参数
   std::string det_model_file = argv[1];
   std::string rec_model_file = argv[2];
   std::string cls_model_file = argv[3];
   std::string dict_path = "./ppocr_keys_v1.txt";
-  std::string img_path = "./test.jpg";
+  initOcrArgs(det_model_file, rec_model_file, cls_model_file, dict_path);
   char* camera_device = argv[4];
   
   //初始化设备
@@ -59,7 +59,7 @@ int main(int argc, char **argv) {
   startCaptureTask();
 
   //开启OcrTask
-  startOcrTask(det_model_file, rec_model_file, cls_model_file, dict_path, img_path);
+  startOcrTask();
 
   //循环检测
   loopTask();
