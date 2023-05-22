@@ -51,3 +51,4 @@ void initOcrArgs(std::string det_model_file, std::string rec_model_file,
 void startOcrTask(void);
 void startCaptureTask(void);
 void loopTask(void);
+void stopTask(void);

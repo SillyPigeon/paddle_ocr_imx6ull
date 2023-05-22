@@ -426,6 +426,8 @@ void* ocrTask(void* arg)
     char savePath[MAX_CAPTURE_FILE_NAME_LENGTH] = "";
     while(1)
     {   
+        //for cancel
+        pthread_testcancel();
         //check queue start
         pthread_mutex_lock(&gCapQueueMutex);//[LOCK]
         if (captureQueue.empty()){
@@ -489,6 +491,8 @@ void* captureTask(void* arg)
     char savePath[MAX_CAPTURE_FILE_NAME_LENGTH] = "";
     while(1)
     {
+        //for cancel
+        pthread_testcancel();
         //check queue start
         pthread_mutex_lock(&gCapQueueMutex);//[LOCK]
         if (captureQueue.size() >= MAX_CAPTURE_SIZE){
@@ -509,6 +513,7 @@ void* captureTask(void* arg)
         sprintf(savePath, "test_%d.jpg", new_index);
         auto element = CaptureElement(savePath, new_index);
         captureQueue.push(element);
+        //check queue end
         //save picture
         v4l2_capture_one_frame(savePath);
         pthread_mutex_unlock(&gCapQueueMutex);//[UNLOCK]
@@ -532,6 +537,11 @@ void startOcrTask(void){
     }
 }
 
+void stopTask(void)
+{
+    pthread_cancel(capture_thread_id);
+    pthread_cancel(ocr_thread_id);
+}
 
 void loopTask(void)
 {

@@ -14,12 +14,15 @@
 
 #include "task_manager.h"
 
+
+
 //进程退出处理，程序调用 exit 或 main函数return 或 最后一个线程正常退出
 void signalHandle(int sig)
 {
     //handle
     std::cerr << "[WARNING] progress exit\n";
     v4l2_off();
+    stopTask();
 }
 
 void exitHandle(void)
@@ -27,6 +30,7 @@ void exitHandle(void)
     //handle
     std::cerr << "[WARNING] progress exit\n";
     v4l2_off();
+    stopTask();
 }
 
 int main(int argc, char **argv) {
