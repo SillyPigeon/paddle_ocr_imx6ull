@@ -279,6 +279,31 @@ void v4l2_off(void)
     close(v4l2_fd);
 }
 
+int init_camera(const char* device)
+{
+  /* 初始化摄像头 */
+  if (v4l2_dev_init(device)){
+      return -1;
+  }
+
+  /* 设置格式 */
+  if (v4l2_set_format()){
+      return -1;
+  }
+
+  /* 初始化帧缓冲：申请、内存映射、入队 */
+  if (v4l2_init_buffer()){
+      return -1;
+  }
+
+  /* 开启视频采集 */
+  if (v4l2_stream_on()){
+      return -1;
+  }
+
+  return 0;
+}
+
 // 摄像头单独测试代码
 // int main(int argc, char *argv[])
 // {

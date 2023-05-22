@@ -54,6 +54,8 @@ int v4l2_stream_on(void);
 void v4l2_off(void);
 
 void v4l2_get_data(void);
+
+int init_camera(const char* device);
 #ifdef __cplusplus
 }
 #endif

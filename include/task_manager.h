@@ -21,6 +21,7 @@
 #include "crnn_process.h"
 #include "db_post_process.h"
 #include "v4l2_camera.h"
+#include "paddle_api.h" // NOLINT
 
 void startCaptureTask(void);
 

@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "paddle_api.h" // NOLINT
 #include "task_manager.h"
 
 //进程退出处理，程序调用 exit 或 main函数return 或 最后一个线程正常退出
@@ -60,11 +59,7 @@ int main(int argc, char **argv) {
   startCaptureTask();
 
   //开启OcrTask
-  startOcrTask(std::string det_model_file,;
-               std::string rec_model_file,;
-               std::string cls_model_file,;
-               std::string dict_path,;
-               std::string img_path,);
+  startOcrTask(det_model_file, rec_model_file, cls_model_file, dict_path, img_path);
 
   //循环检测
   loopTask();
