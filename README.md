@@ -114,9 +114,11 @@ opencv 运行环境库 -- libopencv_*.so
 
 ./paddle_lite_ocr ch_ppocr_mobile_v2.0_det_slim_opt.nb ch_ppocr_mobile_v2.0_rec_slim_opt.nb ch_ppocr_mobile_v2.0_cls_slim_opt.nb lite_demo.png ppocr_keys_v1.txt
 
-### 5、摄像头说明
+## 5、摄像头说明
 
-v0.2 接入了摄像头，通过如下文件可以设置参数
+v0.2 接入了USB摄像头，符合v4l2架构的即可使用，笔者使用的是淘宝普通USB免驱的摄像头
+
+通过如下文件可以设置参数
 
 ...\paddle_ocr_imx6ull\camera\include\v4l2_camera.h
 
