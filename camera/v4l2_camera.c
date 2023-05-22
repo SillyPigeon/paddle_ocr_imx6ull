@@ -137,7 +137,7 @@ void v4l2_print_formats(void)
     }
 }
 
-int v4l2_set_format(int setWidth, int setHeight, int setFps)
+int v4l2_set_format(int setWidth, int setHeight, int setFps, int setPixelType)
 {
     struct v4l2_format fmt = {0};
     struct v4l2_streamparm streamparm = {0};
@@ -146,7 +146,7 @@ int v4l2_set_format(int setWidth, int setHeight, int setFps)
     fmt.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;//type类型
     fmt.fmt.pix.width = setWidth;  //视频帧宽度
     fmt.fmt.pix.height = setHeight;//视频帧高度
-    fmt.fmt.pix.pixelformat = V4L2_PIX_FMT_MJPEG;  //像素格式
+    fmt.fmt.pix.pixelformat = setPixelType;  //像素格式
     if (0 > ioctl(v4l2_fd, VIDIOC_S_FMT, &fmt)) {
         fprintf(stderr, "ioctl error: VIDIOC_S_FMT: %s\n", strerror(errno));
         return -1;
@@ -288,7 +288,8 @@ int init_camera(const char* device)
   /* 设置格式 */
   if (v4l2_set_format(CAMERA_FORMAT_WIDTH, 
                       CAMERA_FORMAT_HEIGHT, 
-                      CAMERA_FORMAT_FPS)){
+                      CAMERA_FORMAT_FPS,
+                      CAMERA_FORMAT_PIXEL_TYPE)){
       return -1;
   }
 

@@ -28,6 +28,7 @@ extern "C"{
 #define CAMERA_FORMAT_WIDTH           320
 #define CAMERA_FORMAT_HEIGHT          240
 #define CAMERA_FORMAT_FPS             30
+#define CAMERA_FORMAT_PIXEL_TYPE      V4L2_PIX_FMT_MJPEG
 
 /*** 摄像头像素格式及其描述信息 ***/
 typedef struct camera_format {
@@ -50,7 +51,7 @@ void v4l2_enum_formats(void);
 
 void v4l2_print_formats(void);
 
-int v4l2_set_format(int setWidth, int setHeight, int setFps);
+int v4l2_set_format(int setWidth, int setHeight, int setFps, int setPixelType);
 
 int v4l2_init_buffer(void);
 
