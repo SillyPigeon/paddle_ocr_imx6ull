@@ -12,8 +12,8 @@ set(CMAKE_CXX_COMPILER "arm-linux-gnueabihf-g++")
 project(paddle_lite_ocr)
 set(TARGET paddle_lite_ocr)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mfpu=neon")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -mfpu=neon")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mfpu=neon -pthread")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -mfpu=neon -pthread")
 
 #2.config OpenMP
 set(OpenMP_CXX_FLAGS "-fopenmp")
