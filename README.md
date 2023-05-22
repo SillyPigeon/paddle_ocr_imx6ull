@@ -60,7 +60,7 @@ https://www.paddlepaddle.org.cn/lite/develop/source_compile/linux_x86_compile_ar
 
 #### 步骤2：
 
-运行脚本 ./build.sh 
+运行脚本 ./make.sh 
 
 #### 注意事项: 
 
@@ -75,6 +75,8 @@ https://www.paddlepaddle.org.cn/lite/develop/source_compile/linux_x86_compile_ar
 ## 4、运行测试说明
 
 本工程在正点原子 imx6ull 的阿尔法板上运行测试正常，理论上均适用于在armv7hf架构CPU上的linux系统
+
+适配UVC摄像头，市面上普通免驱摄像头已验证可以使用
 
 #### 步骤1：
 
@@ -111,3 +113,18 @@ opencv 运行环境库 -- libopencv_*.so
 也可自行按照测试脚本或者代码ocr_db_crnn.cc来运行测试:
 
 ./paddle_lite_ocr ch_ppocr_mobile_v2.0_det_slim_opt.nb ch_ppocr_mobile_v2.0_rec_slim_opt.nb ch_ppocr_mobile_v2.0_cls_slim_opt.nb lite_demo.png ppocr_keys_v1.txt
+
+### 5、摄像头说明
+
+v0.2 接入了摄像头，通过如下文件可以设置参数
+
+...\paddle_ocr_imx6ull\camera\include\v4l2_camera.h
+
+#define CAMERA_FORMAT_WIDTH           320
+#define CAMERA_FORMAT_HEIGHT          240
+#define CAMERA_FORMAT_FPS                 30
+#define CAMERA_FORMAT_PIXEL_TYPE      V4L2_PIX_FMT_MJPEG
+
+具体摄像头支持分辨率和像素格式可以通过单独编译如下文件进行测试，具体参照代码
+
+\paddle_ocr_imx6ull\camera\v4l2_camera.c
