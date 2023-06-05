@@ -19,9 +19,8 @@
 using namespace paddle::lite_api; // NOLINT
 using namespace std;
 
-std::chrono::time_point<std::chrono::system_clock> start_time, end_init, \
-                                                   end_load_imgs, end_load_model, \
-                                                   end_RunDetModel, end_time;
+std::chrono::time_point<std::chrono::system_clock> start_init_time, end_init, \
+                                                   start_ocr_time, end_load_img, end_RunDetModel, end_time;
 
 pthread_t capture_thread_id;
 pthread_t ocr_thread_id;
@@ -165,8 +164,7 @@ void RunRecModel(std::vector<std::vector<std::vector<int>>> boxes, cv::Mat img,
                  std::vector<std::string> &rec_text,
                  std::vector<float> &rec_text_score,
                  std::vector<std::string> charactor_dict,
-                 std::shared_ptr<PaddlePredictor> predictor_cls,
-                 int use_direction_classify) {
+                 std::shared_ptr<PaddlePredictor> predictor_cls) {
   std::vector<float> mean = {0.5f, 0.5f, 0.5f};
   std::vector<float> scale = {1 / 0.5f, 1 / 0.5f, 1 / 0.5f};
 
@@ -178,9 +176,9 @@ void RunRecModel(std::vector<std::vector<std::vector<int>>> boxes, cv::Mat img,
   int index = 0;
   for (int i = boxes.size() - 1; i >= 0; i--) {
     crop_img = GetRotateCropImage(srcimg, boxes[i]);
-    if (use_direction_classify >= 1) {
-      crop_img = RunClsModel(crop_img, predictor_cls);
-    }
+    // if (use_direction_classify >= 1) {
+    //   crop_img = RunClsModel(crop_img, predictor_cls);
+    // }
     float wh_ratio =
         static_cast<float>(crop_img.cols) / static_cast<float>(crop_img.rows);
 
@@ -363,35 +361,27 @@ std::map<std::string, double> LoadConfigTxt(std::string config_path) {
 
 static void showDebugTimeInfo(void){
   auto duration_init =
-      std::chrono::duration_cast<std::chrono::microseconds>(end_init - start_time);
+      std::chrono::duration_cast<std::chrono::microseconds>(end_init - start_init_time);
 
-  auto duration_load_model =
-      std::chrono::duration_cast<std::chrono::microseconds>(end_load_model - end_init);
-
-  auto duration_load_imgs =
-      std::chrono::duration_cast<std::chrono::microseconds>(end_load_imgs - end_load_model);
+  auto duration_LoadImg =
+      std::chrono::duration_cast<std::chrono::microseconds>(end_load_img - start_ocr_time);
 
   auto duration_RunDetModel =
-      std::chrono::duration_cast<std::chrono::microseconds>(end_RunDetModel - end_load_imgs);
+      std::chrono::duration_cast<std::chrono::microseconds>(end_RunDetModel - end_load_img);
 
   auto duration_RunRecModel =
       std::chrono::duration_cast<std::chrono::microseconds>(end_time - end_RunDetModel);
 
   auto duration =
-      std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time);
+      std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_ocr_time);
 
-  std::cout << "初始化花费了"
-            << double(duration_init.count()) *
-                   std::chrono::microseconds::period::num /
-                   std::chrono::microseconds::period::den
-            << "秒" << std::endl;
-  std::cout << "加载模型花费了"
-            << double(duration_load_model.count()) *
-                   std::chrono::microseconds::period::num /
-                   std::chrono::microseconds::period::den
-            << "秒" << std::endl;
+  // std::cout << "初始化花费了"
+  //           << double(duration_init.count()) *
+  //                  std::chrono::microseconds::period::num /
+  //                  std::chrono::microseconds::period::den
+  //           << "秒" << std::endl;
   std::cout << "加载图片花费了"
-            << double(duration_load_imgs.count()) *
+            << double(duration_LoadImg.count()) *
                    std::chrono::microseconds::period::num /
                    std::chrono::microseconds::period::den
             << "秒" << std::endl;
@@ -405,8 +395,7 @@ static void showDebugTimeInfo(void){
                    std::chrono::microseconds::period::num /
                    std::chrono::microseconds::period::den
             << "秒" << std::endl;
-
-  std::cout << "总共花费了"
+  std::cout << "识别阶段总共花费了"
             << double(duration.count()) *
                    std::chrono::microseconds::period::num /
                    std::chrono::microseconds::period::den
@@ -424,6 +413,18 @@ void initOcrArgs(std::string det_model_file, std::string rec_model_file,
 void* ocrTask(void* arg)
 {
     char savePath[MAX_CAPTURE_FILE_NAME_LENGTH] = "";
+    start_init_time = std::chrono::system_clock::now();//[debug]
+    //// load config from txt file
+    auto Config = LoadConfigTxt("./config.txt");
+    // int use_direction_classify = int(Config["use_direction_classify"]);
+    auto det_predictor = loadModel(gOcrArgs.det_model_file);
+    auto rec_predictor = loadModel(gOcrArgs.rec_model_file);
+    auto cls_predictor = loadModel(gOcrArgs.cls_model_file);
+    auto charactor_dict = ReadDict(gOcrArgs.dict_path);
+    charactor_dict.insert(charactor_dict.begin(), "#"); // blank char for ctc
+    charactor_dict.push_back(" ");
+
+    end_init = std::chrono::system_clock::now();//[debug]
     while(1)
     {   
         //for cancel
@@ -440,29 +441,13 @@ void* ocrTask(void* arg)
         captureQueue.pop();
         pthread_mutex_unlock(&gCapQueueMutex);//[UNLOCK]
         //check queue end
+        start_ocr_time = std::chrono::system_clock::now();//[debug]
 
         std::string img_path = savePath;
         std::cout << "[DEBUG] ocr check img_path: " << img_path <<std::endl;
-        start_time = std::chrono::system_clock::now();//[debug]
-        //// load config from txt file
-        auto Config = LoadConfigTxt("./config.txt");
-        int use_direction_classify = int(Config["use_direction_classify"]);
-
-        end_init = std::chrono::system_clock::now();//[debug]
-
-        auto det_predictor = loadModel(gOcrArgs.det_model_file);
-        auto rec_predictor = loadModel(gOcrArgs.rec_model_file);
-        auto cls_predictor = loadModel(gOcrArgs.cls_model_file);
-
-        end_load_model = std::chrono::system_clock::now();//[debug]
-
-        auto charactor_dict = ReadDict(gOcrArgs.dict_path);
-        charactor_dict.insert(charactor_dict.begin(), "#"); // blank char for ctc
-        charactor_dict.push_back(" ");
-
         cv::Mat srcimg = cv::imread(img_path, cv::IMREAD_COLOR);
 
-        end_load_imgs = std::chrono::system_clock::now();//[debug]
+        end_load_img = std::chrono::system_clock::now();//[debug]
 
         auto boxes = RunDetModel(det_predictor, srcimg, Config);
 
@@ -472,11 +457,11 @@ void* ocrTask(void* arg)
         end_RunDetModel = std::chrono::system_clock::now();//[debug]
 
         RunRecModel(boxes, srcimg, rec_predictor, rec_text, rec_text_score,
-                    charactor_dict, cls_predictor, use_direction_classify);
+                    charactor_dict, cls_predictor);
 
         end_time = std::chrono::system_clock::now();//[debug]
         // debug info
-        auto img_vis = Visualization(srcimg, boxes);
+        // auto img_vis = Visualization(srcimg, boxes);
         for (int i = 0; i < rec_text.size(); i++) {
           std::cout << i << "\t" << rec_text[i] << "\t" << rec_text_score[i]
                     << std::endl;
