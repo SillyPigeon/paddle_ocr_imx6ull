@@ -26,14 +26,16 @@ set(OpenMP_pthread_LIBRARY "/usr/arm-linux-gnueabihf/lib/libpthread.so")
 #3.Set ARMLINUX_ARCH_ABI to armv8 or armv7 or armv7hf
 set(ARMLINUX_ARCH_ABI armv7hf)
 
-#4. path to Paddle-Lite lib
+#4. set path include
+include_directories(${CMAKE_SOURCE_DIR}/include)
+
+#5. path to Paddle-Lite lib
 set(LITE_DIR "${CMAKE_SOURCE_DIR}/ocr_lib")
 
-#5. link Paddle-Lite directory
+#6. link Paddle-Lite directory
 link_directories(${LITE_DIR}/lib)
-include_directories(${LITE_DIR}/include)
 
-#6. add OpenMP package
+#7. add OpenMP package
 FIND_PACKAGE( OpenMP REQUIRED)
 if(OPENMP_FOUND)
   message("OPENMP FOUND")
@@ -42,23 +44,21 @@ if(OPENMP_FOUND)
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
 endif()
 
-#7.add opencv lib
+#8.add opencv lib
 set(OpenCV_DIR ${LITE_DIR}/opencv-linux-armv7hf/share/OpenCV)
 find_package(OpenCV REQUIRED)
 
-#8.set camera files 
-include_directories(${CMAKE_SOURCE_DIR}/camera/include)
+#9.set camera files 
 file(GLOB_RECURSE CAMERA_SRC_LIST "${CMAKE_SOURCE_DIR}/camera/*.cpp" "${CMAKE_SOURCE_DIR}/camera/*.c") 
 message(STATUS "CAMERA_SRC_LIST = ${CAMERA_SRC_LIST}")     
 
-#9.set ocr files
-include_directories(${CMAKE_SOURCE_DIR}/include)
+#10.set ocr files
 file(GLOB_RECURSE OCR_SRC_LIST "${CMAKE_SOURCE_DIR}/src/*.cpp" "${CMAKE_SOURCE_DIR}/src/*.cc" "${CMAKE_SOURCE_DIR}/src/*.c") 
 message(STATUS "OCR_SRC_LIST = ${OCR_SRC_LIST}")     
 
 set(CMAKE_CXX_STANDARD 14)
 
-#10.add executable output
+#11.add executable output
 add_executable(${TARGET} ${OCR_SRC_LIST} ${CAMERA_SRC_LIST})
 target_link_libraries(${TARGET} -lpaddle_light_api_shared ${OpenCV_LIBS})
 target_link_libraries(${TARGET} -ldl)
