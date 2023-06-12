@@ -64,6 +64,3 @@ BoxesFromBitmap(const cv::Mat bitmap, std::map<std::string, double> Config);
 std::vector<std::vector<std::vector<int>>>
 FilterTagDetRes(std::vector<std::vector<std::vector<int>>> boxes, float ratio_h,
                 float ratio_w, cv::Mat srcimg);
-
-std::vector<std::vector<std::vector<int>>>
-BoxesFromRects(const std::vector<cv::Rect> rects, const cv::Mat bitmap);
