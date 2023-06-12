@@ -24,6 +24,7 @@
 #include "opencv2/core.hpp"
 #include "opencv2/imgcodecs.hpp"
 #include "opencv2/imgproc.hpp"
+#include "opencv2/features2d.hpp"
 
 template <class T> T clamp(T x, T min, T max) {
   if (x > max)
@@ -58,5 +59,11 @@ BoxesFromBitmap(const cv::Mat pred, const cv::Mat bitmap,
                 std::map<std::string, double> Config);
 
 std::vector<std::vector<std::vector<int>>>
+BoxesFromBitmap(const cv::Mat bitmap, std::map<std::string, double> Config);
+
+std::vector<std::vector<std::vector<int>>>
 FilterTagDetRes(std::vector<std::vector<std::vector<int>>> boxes, float ratio_h,
                 float ratio_w, cv::Mat srcimg);
+
+std::vector<std::vector<std::vector<int>>>
+BoxesFromRects(const std::vector<cv::Rect> rects, const cv::Mat bitmap);

@@ -296,6 +296,51 @@ RunDetModel(std::shared_ptr<PaddlePredictor> predictor, cv::Mat img,
   return filter_boxes;
 }
 
+//Detect text by using traditional method
+std::vector<std::vector<std::vector<int>>>
+RunDetMethod(cv::Mat img, std::map<std::string, double> Config) {
+  // Read img
+  int max_side_len = int(Config["max_side_len"]);
+
+  cv::Mat imgBuf1,imgBuf2;
+  cv::Mat grad_x, grad_y;
+  cv::Mat abs_grad_x,abs_grad_y;
+
+  cv::cvtColor(img, imgBuf1, cv::COLOR_BGR2GRAY);
+
+  //计算X方向的梯度
+  cv::Sobel(imgBuf1, grad_x, CV_16S, 1, 0, 3, 1, 0, cv::BORDER_DEFAULT);
+  cv::convertScaleAbs(grad_x, abs_grad_x);
+  //计算y方向的梯度
+  cv::Sobel(imgBuf1, grad_y, CV_16S, 0, 1, 3, 1, 0, cv::BORDER_DEFAULT);
+  cv::convertScaleAbs(grad_y, abs_grad_y);
+  //合并梯度
+  cv::addWeighted(abs_grad_x, 0.5, abs_grad_y, 0.5, 0, imgBuf1);
+  //二值化
+  //cv::adaptiveThreshold(imgBuf1, imgBuf2, 255, cv::ADAPTIVE_THRESH_GAUSSIAN_C, cv::THRESH_BINARY, 11, -2);
+  cv::threshold(imgBuf1, imgBuf2, 25, 255, cv::THRESH_BINARY);
+
+  //腐蚀膨胀
+  cv::Mat element1 = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(5, 5));
+  cv::Mat element2 = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(5, 5));
+ 
+  //膨胀一次，让轮廓突出
+  cv::dilate(imgBuf2, imgBuf1, element2);
+ 
+  //腐蚀一次，去掉细节
+  cv::erode(imgBuf1, imgBuf2, element1);
+ 
+  //再次膨胀，让轮廓明显一些
+  cv::dilate(imgBuf2, imgBuf1, element2);
+
+  auto boxes = BoxesFromBitmap(imgBuf1, Config);
+  
+  // std::vector<std::vector<std::vector<int>>> filter_boxes =
+  //     FilterTagDetRes(boxes, ratio_hw[0], ratio_hw[1], img);
+
+  return boxes;
+}
+
 std::shared_ptr<PaddlePredictor> loadModel(std::string model_file) {
   MobileConfig config;
   config.set_model_from_file(model_file);

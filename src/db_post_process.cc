@@ -315,6 +315,83 @@ BoxesFromBitmap(const cv::Mat pred, const cv::Mat bitmap,
   return boxes;
 }
 
+
+std::vector<std::vector<std::vector<int>>>
+BoxesFromBitmap(const cv::Mat bitmap, std::map<std::string, double> Config) {
+  const int min_size = 3;
+  const int max_candidates = 1000;
+  const float box_thresh = static_cast<float>(Config["det_db_box_thresh"]);
+  const float unclip_ratio = static_cast<float>(Config["det_db_unclip_ratio"]);
+  const int det_use_polygon_score = int(Config["det_use_polygon_score"]);
+
+  int width = bitmap.cols;
+  int height = bitmap.rows;
+
+  std::vector<std::vector<cv::Point>> contours;
+  std::vector<cv::Vec4i> hierarchy;
+
+  cv::findContours(bitmap, contours, hierarchy, cv::RETR_LIST,
+                   cv::CHAIN_APPROX_SIMPLE);
+
+  int num_contours =
+      contours.size() >= max_candidates ? max_candidates : contours.size();
+
+  std::vector<std::vector<std::vector<int>>> boxes;
+
+  for (int i = 0; i < num_contours; i++) {
+    float ssid;
+    if (contours[i].size() <= 2)
+      continue;
+
+    if (contourArea(contours[i]) < 1000)
+      continue;
+
+    cv::RotatedRect box = cv::minAreaRect(contours[i]);
+    auto array = GetMiniBoxes(box, ssid);
+
+    auto box_for_unclip = array;
+    // end get_mini_box
+
+    if (ssid < min_size) {
+      continue;
+    }
+
+    // start for unclip
+    cv::RotatedRect points = Unclip(box_for_unclip, unclip_ratio);
+    if (points.size.height < 1.001 && points.size.width < 1.001)
+      continue;
+    // end for unclip
+
+    cv::RotatedRect clipbox = points;
+    auto cliparray = GetMiniBoxes(clipbox, ssid);
+
+    if (ssid < min_size + 2)
+      continue;
+
+    int box_w = cliparray[0][1] - cliparray[2][1];
+    int box_h = cliparray[0][0] - cliparray[2][0];
+
+    if (box_h > box_w * 1.3)
+      continue;
+
+    std::vector<std::vector<int>> intcliparray;
+
+    for (int num_pt = 0; num_pt < 4; num_pt++) {
+      std::vector<int> a{
+          static_cast<int>(clamp(
+              roundf(cliparray[num_pt][0]),
+              float(0), float(width))),
+          static_cast<int>(clamp(
+              roundf(cliparray[num_pt][1]),
+              float(0), float(height)))};
+      intcliparray.push_back(a);
+    }
+    boxes.push_back(intcliparray);
+
+  } // end for
+  return boxes;
+}
+
 std::vector<std::vector<std::vector<int>>>
 FilterTagDetRes(std::vector<std::vector<std::vector<int>>> boxes, float ratio_h,
                 float ratio_w, cv::Mat srcimg) {
