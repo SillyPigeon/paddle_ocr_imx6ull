@@ -43,6 +43,28 @@ typedef struct cam_buf_info {
 } cam_buf_info;
 
 
+typedef struct {
+    unsigned short    bfType;//0x4d42
+    int      bfSize;//sizeof(BMPFILEHEADER_T)+sizeof(BMPINFOHEADER_T)+width*height*3, 整个文件的大小
+    unsigned short    bfReserved1;
+    unsigned short    bfReserved2;
+    int   bfOffBits;//sizeof(BMPFILEHEADER_T)+sizeof(BMPINFOHEADER_T),就是RGB数据的偏移量, 偏移这两个数据结构
+} BMPFILEHEADER_T;
+
+typedef struct{
+    int      biSize;//sizeof(BMPINFOHEADER_T)
+    int      biWidth;
+    int      biHeight;
+    unsigned short       biPlanes;
+    unsigned short       biBitCount;//RGB24, 就是24位
+    int      biCompression;//0， 不压缩
+    int      biSizeImage;//RGB24数据大小
+    int      biXPelsPerMeter;//
+    int      biYPelsPerMeter;//
+    int      biClrUsed;//0
+    int      biClrImportant;//0
+} BMPINFOHEADER_T;
+
 int fb_dev_init(void);
 
 int v4l2_dev_init(const char *device);
@@ -53,6 +75,8 @@ void v4l2_print_formats(void);
 
 int v4l2_set_format(int setWidth, int setHeight, int setFps, int setPixelType);
 
+int v4l2_set_format_for_yuyv(int setWidth, int setHeight, int setFps);
+
 int v4l2_init_buffer(void);
 
 int v4l2_stream_on(void);
@@ -60,6 +84,8 @@ int v4l2_stream_on(void);
 void v4l2_off(void);
 
 void v4l2_capture_one_frame(const char* savePath);
+
+void v4l2_capture_one_frame_for_yuyv(const char* savePath);
 
 int init_camera(const char* device);
 #ifdef __cplusplus

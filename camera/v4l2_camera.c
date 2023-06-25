@@ -13,6 +13,7 @@
 
 #define FB_DEV              "/dev/fb0"      //LCD设备节点
 #define FRAMEBUFFER_COUNT   1               //帧缓冲数量
+#define RGB_PIXEL_BYTES     3               //RGB像素占用位宽
 
 static int width;                       //LCD宽度
 static int height;                      //LCD高度
@@ -22,6 +23,9 @@ static int v4l2_fd = -1;                //摄像头设备文件描述符
 static cam_buf_info buf_infos[FRAMEBUFFER_COUNT];
 static cam_fmt cam_fmts[10];
 static int frm_width, frm_height;   //视频帧宽度和高度
+
+static void yuyv_to_rgb(unsigned char* yuv,unsigned char* rgb);
+static void rgb_to_bmp(unsigned char* pdata, FILE* bmp_fd);
 
 int fb_dev_init(void)
 {
@@ -173,6 +177,14 @@ int v4l2_set_format(int setWidth, int setHeight, int setFps, int setPixelType)
     return 0;
 }
 
+int v4l2_set_format_for_yuyv(int setWidth, int setHeight, int setFps)
+{
+    return v4l2_set_format(setWidth, 
+                           setHeight, 
+                           setFps,
+                           V4L2_PIX_FMT_YUYV);
+}
+
 int v4l2_init_buffer(void)
 {
     struct v4l2_requestbuffers reqbuf = {0};
@@ -267,6 +279,165 @@ void v4l2_capture_one_frame(const char* savePath)
     }
 }
 
+void v4l2_capture_one_frame_for_yuyv(const char* savePath)
+{
+    struct v4l2_buffer readbuffer = {0};
+    unsigned char rgb_buffers[(CAMERA_FORMAT_WIDTH * CAMERA_FORMAT_HEIGHT) * RGB_PIXEL_BYTES] = {};
+    unsigned short *base;
+    unsigned short *start;
+    int min_w, min_h;
+    int  file_index = 0;
+
+    if (width > frm_width)
+        min_w = frm_width;
+    else
+        min_w = width;
+    if (height > frm_height)
+        min_h = frm_height;
+    else
+        min_h = height;
+
+    readbuffer.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+    readbuffer.memory = V4L2_MEMORY_MMAP;
+    //for (int i = 0; i < 2; ++i)
+    {
+        for (readbuffer.index = 0; readbuffer.index < FRAMEBUFFER_COUNT; readbuffer.index++, file_index++)
+        {
+            //出队列
+            ioctl(v4l2_fd, VIDIOC_DQBUF, &readbuffer);
+
+            // for DEBUG to save yuv
+            // FILE *file_yuv=fopen("yuv_test.yuv", "w");  //打开一个文件
+            // fwrite( buf_infos[readbuffer.index].start, readbuffer.length, 1, file_yuv);//写入文件
+            // fclose(file_yuv); //写入完成，关闭文件
+
+            yuyv_to_rgb((unsigned char*)buf_infos[readbuffer.index].start, rgb_buffers);
+
+            //存储图片
+            FILE *file=fopen(savePath, "w");  //打开一个文件
+            rgb_to_bmp(rgb_buffers, file);
+            fclose(file);    //写入完成，关闭文件
+            // 数据处理完之后、再入队、往复, 从内核取出后需要放回(释放)
+            ioctl(v4l2_fd, VIDIOC_QBUF, &readbuffer);
+        }
+    }
+}
+
+static void yuyv_to_rgb(unsigned char* yuv, unsigned char* rgb)
+{
+    //Init first two pixels
+    unsigned int i;
+    unsigned char *y0, *u0, *y1, *v0;
+    unsigned char *r0, *g0, *b0, *r1, *g1, *b1;
+   
+    float rt0 = 0, gt0 = 0, bt0 = 0, rt1 = 0, gt1 = 0, bt1 = 0;
+
+    if((yuv == NULL) || (rgb == NULL)){
+        return;
+    }
+
+    //printf("[DEBUG]: [%d][%d],[%d][%d]\n",*y0,*u0,*y1,*v0);    
+    //transfer by each two pixel
+    for(i = (CAMERA_FORMAT_WIDTH * CAMERA_FORMAT_HEIGHT) / 2 ; 
+        i > 0; 
+        i--)
+    {
+        y0 = yuv + 0;
+        u0 = yuv + 1;
+        y1 = yuv + 2;
+        v0 = yuv + 3;
+  
+        r0 = rgb + 0;
+        g0 = rgb + 1;
+        b0 = rgb + 2;
+        r1 = rgb + 3;
+        g1 = rgb + 4;
+        b1 = rgb + 5;
+
+        bt0 = *y0 + 1.4075 * (*v0 - 128);
+        gt0 = *y0 - 0.3455 * (*u0 - 128) - 0.7169 * (*v0 - 128);
+        rt0 = *y0 + 1.7790 * (*u0 - 128); 
+
+        bt1 = *y1 + 1.4075 * (*v0 - 128);
+        gt1 = *y1 - 0.3455 * (*u0 - 128) - 0.7169 * (*v0 - 128);
+        rt1 = *y1 + 1.7790 * (*u0 - 128);
+      
+        if(rt0 > 250)     rt0 = 255;
+        if(rt0< 0)        rt0 = 0;
+ 
+        if(gt0 > 250)     gt0 = 255;
+        if(gt0 < 0)       gt0 = 0;
+ 
+        if(bt0 > 250)     bt0 = 255;
+        if(bt0 < 0)       bt0 = 0;
+ 
+        if(rt1 > 250)     rt1 = 255;
+        if(rt1 < 0)       rt1 = 0;
+ 
+        if(gt1 > 250)     gt1 = 255;
+        if(gt1 < 0)       gt1 = 0;  
+ 
+        if(bt1 > 250)     bt1 = 255;
+        if(bt1 < 0)       bt1 = 0;
+                    
+        *r0 = (unsigned char)rt0;
+        *g0 = (unsigned char)gt0;
+        *b0 = (unsigned char)bt0;
+    
+        *r1 = (unsigned char)rt1;
+        *g1 = (unsigned char)gt1;
+        *b1 = (unsigned char)bt1;
+
+        //if not last, switch to next
+        if (1 != i){
+            yuv += 4;
+            rgb += 6;
+        }
+    }   
+}
+
+static void rgb_to_bmp(unsigned char* pdata, FILE* bmp_fd)     
+{
+    //分别为rgb数据，要保存的bmp文件名 
+    int size = CAMERA_FORMAT_WIDTH * CAMERA_FORMAT_HEIGHT * 3 * sizeof(char); // 每个像素点3个字节  
+    // 位图第一部分，文件信息  
+    BMPFILEHEADER_T bfh; 
+    //Warning::This is may be a bug
+    //To compile cortex A7 arm-linux-gcc hf count sizeof(BMPFILEHEADER_T) to 16 bits
+    //but it should be 14 bits, so count by manual to -2 bias
+    int head_length = sizeof( BMPFILEHEADER_T ) - 2; // first section size  
+
+    bfh.bfType = (unsigned short) 0x4d42;  //bmp HEAD  
+    bfh.bfSize = size + head_length + sizeof(BMPINFOHEADER_T);
+    bfh.bfReserved1 = 0; // reserved  
+    bfh.bfReserved2 = 0; // reserved  
+    bfh.bfOffBits = head_length + sizeof(BMPINFOHEADER_T);//真正的数据的位置 
+    // 位图第二部分，数据信息  
+    BMPINFOHEADER_T bih;  
+    bih.biSize = sizeof(BMPINFOHEADER_T);  
+    bih.biWidth = CAMERA_FORMAT_WIDTH;  
+    bih.biHeight = -CAMERA_FORMAT_HEIGHT;//BMP图片从最后一个点开始扫描，显示时图片是倒着的，所以用-height，这样图片就正了  
+    bih.biPlanes = 1;//为1，不用改  
+    bih.biBitCount = 24;  
+    bih.biCompression = 0;//不压缩  
+    bih.biSizeImage = size;  
+ 
+    bih.biXPelsPerMeter = 0;//像素每米  
+  
+    bih.biYPelsPerMeter = 0;  
+    bih.biClrUsed = 0;//已用过的颜色，为0,与bitcount相同  
+    bih.biClrImportant = 0;//每个像素都重要   
+    
+
+    fwrite(&bfh.bfType, 2, 1, bmp_fd);//BMP head word
+    fwrite(&bfh.bfSize, head_length - 2, 1, bmp_fd);  
+    fwrite(&bih, sizeof(BMPINFOHEADER_T), 1, bmp_fd);  
+    fwrite(pdata, size, 1, bmp_fd);   
+} 
+
+
+//***********************************流程函数************************************************//
+
 void v4l2_off(void)
 {
     int type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
@@ -313,38 +484,39 @@ int init_camera(const char* device)
 //         fprintf(stderr, "Usage: %s <video_dev>\n", argv[0]);
 //         exit(EXIT_FAILURE);
 //     }
-
-//     /* 初始化LCD */
-//     if (fb_dev_init())
-//         exit(EXIT_FAILURE);
-
 //     /* 初始化摄像头 */
-//     if (v4l2_dev_init(argv[1]))
-//         exit(EXIT_FAILURE);
-
-//     /* 枚举所有格式并打印摄像头支持的分辨率及帧率 */
-//     v4l2_enum_formats();
-//     v4l2_print_formats();
+//     if (v4l2_dev_init(argv[1])){
+//         return -1;
+//     }
 
 //     /* 设置格式 */
-//     if (v4l2_set_format())
-//         exit(EXIT_FAILURE);
+//     if (v4l2_set_format_for_yuyv(CAMERA_FORMAT_WIDTH, 
+//                                  CAMERA_FORMAT_HEIGHT, 
+//                                  CAMERA_FORMAT_FPS)){
+//         return -1;
+//     }
 
 //     /* 初始化帧缓冲：申请、内存映射、入队 */
-//     if (v4l2_init_buffer())
-//         exit(EXIT_FAILURE);
+//     if (v4l2_init_buffer()){
+//         return -1;
+//     }
 
 //     /* 开启视频采集 */
-//     if (v4l2_stream_on())
-//         exit(EXIT_FAILURE);
-
-//     /* 读取数据：出队 */
-//     v4l2_read_data();       //在函数内循环采集数据、将其显示到LCD屏
-
-//     //退出程序
-//     for (int i=0; i < FRAMEBUFFER_COUNT; i++) {
-//         munmap(buf_infos[i].start, buf_infos[i].length);
+//     if (v4l2_stream_on()){
+//        return -1;
 //     }
-//     close(v4l2_fd);
+
+//     /* 枚举所有格式并打印摄像头支持的分辨率及帧率 */
+//     // v4l2_enum_formats();
+//     // v4l2_print_formats();
+
+//     /* 截取图片, 舍弃前几帧坏信息 */
+//     for (int i = 0; i < 5; ++i)
+//     {
+//         v4l2_capture_one_frame_for_yuyv("test.bmp");
+//     }
+    
+//     //退出程序
+//     v4l2_off();
 //     exit(EXIT_SUCCESS);
 // }
