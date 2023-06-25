@@ -402,16 +402,12 @@ static void rgb_to_bmp(unsigned char* pdata, FILE* bmp_fd)
     int size = CAMERA_FORMAT_WIDTH * CAMERA_FORMAT_HEIGHT * 3 * sizeof(char); // 每个像素点3个字节  
     // 位图第一部分，文件信息  
     BMPFILEHEADER_T bfh; 
-    //Warning::This is may be a bug
-    //To compile cortex A7 arm-linux-gcc hf count sizeof(BMPFILEHEADER_T) to 16 bits
-    //but it should be 14 bits, so count by manual to -2 bias
-    int head_length = sizeof( BMPFILEHEADER_T ) - 2; // first section size  
 
     bfh.bfType = (unsigned short) 0x4d42;  //bmp HEAD  
-    bfh.bfSize = size + head_length + sizeof(BMPINFOHEADER_T);
+    bfh.bfSize = size + sizeof(BMPFILEHEADER_T) + sizeof(BMPINFOHEADER_T);
     bfh.bfReserved1 = 0; // reserved  
     bfh.bfReserved2 = 0; // reserved  
-    bfh.bfOffBits = head_length + sizeof(BMPINFOHEADER_T);//真正的数据的位置 
+    bfh.bfOffBits = sizeof(BMPFILEHEADER_T) + sizeof(BMPINFOHEADER_T);//真正的数据的位置 
     // 位图第二部分，数据信息  
     BMPINFOHEADER_T bih;  
     bih.biSize = sizeof(BMPINFOHEADER_T);  
@@ -428,9 +424,7 @@ static void rgb_to_bmp(unsigned char* pdata, FILE* bmp_fd)
     bih.biClrUsed = 0;//已用过的颜色，为0,与bitcount相同  
     bih.biClrImportant = 0;//每个像素都重要   
     
-
-    fwrite(&bfh.bfType, 2, 1, bmp_fd);//BMP head word
-    fwrite(&bfh.bfSize, head_length - 2, 1, bmp_fd);  
+    fwrite(&bfh, sizeof(BMPFILEHEADER_T), 1, bmp_fd);  
     fwrite(&bih, sizeof(BMPINFOHEADER_T), 1, bmp_fd);  
     fwrite(pdata, size, 1, bmp_fd);   
 } 
