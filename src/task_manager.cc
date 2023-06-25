@@ -491,22 +491,26 @@ void* ocrTask(void* arg)
         std::string img_path = savePath;
         std::cout << "[DEBUG] ocr check img_path: " << img_path <<std::endl;
         cv::Mat srcimg = cv::imread(img_path, cv::IMREAD_COLOR);
+        //resize for acceleration
+        cv::Mat resize_srcimg;
+        cv::resize(srcimg, resize_srcimg, cv::Size(80, 60), 0.f, 0.f,
+             cv::INTER_LINEAR);
 
         end_load_img = std::chrono::system_clock::now();//[debug]
 
-        auto boxes = RunDetModel(det_predictor, srcimg, Config);
+        auto boxes = RunDetModel(det_predictor, resize_srcimg, Config);
 
         std::vector<std::string> rec_text;
         std::vector<float> rec_text_score;
 
         end_RunDetModel = std::chrono::system_clock::now();//[debug]
 
-        RunRecModel(boxes, srcimg, rec_predictor, rec_text, rec_text_score,
+        RunRecModel(boxes, resize_srcimg, rec_predictor, rec_text, rec_text_score,
                     charactor_dict, cls_predictor);
 
         end_time = std::chrono::system_clock::now();//[debug]
         // debug info
-        // auto img_vis = Visualization(srcimg, boxes);
+        auto img_vis = Visualization(resize_srcimg, boxes);
         for (int i = 0; i < rec_text.size(); i++) {
           std::cout << i << "\t" << rec_text[i] << "\t" << rec_text_score[i]
                     << std::endl;
