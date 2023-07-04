@@ -451,12 +451,11 @@ int init_camera(const char* device)
   }
 
   /* 设置格式 */
-  if (v4l2_set_format(CAMERA_FORMAT_WIDTH, 
-                      CAMERA_FORMAT_HEIGHT, 
-                      CAMERA_FORMAT_FPS,
-                      CAMERA_FORMAT_PIXEL_TYPE)){
-      return -1;
-  }
+    if (v4l2_set_format_for_yuyv(CAMERA_FORMAT_WIDTH, 
+                                 CAMERA_FORMAT_HEIGHT, 
+                                 CAMERA_FORMAT_FPS)){
+        return -1;
+    }
 
   /* 初始化帧缓冲：申请、内存映射、入队 */
   if (v4l2_init_buffer()){

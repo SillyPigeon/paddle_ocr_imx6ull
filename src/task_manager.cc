@@ -544,12 +544,12 @@ void* captureTask(void* arg)
               new_index = 0;
           }
         }
-        sprintf(savePath, "test_%d.jpg", new_index);
+        sprintf(savePath, "test_%d.bmp", new_index);
         auto element = CaptureElement(savePath, new_index);
         captureQueue.push(element);
         //check queue end
         //save picture
-        v4l2_capture_one_frame(savePath);
+        v4l2_capture_one_frame_for_yuyv(savePath);
         pthread_mutex_unlock(&gCapQueueMutex);//[UNLOCK]
     }
     return NULL;
