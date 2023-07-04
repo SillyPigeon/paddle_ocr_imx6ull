@@ -42,7 +42,7 @@ typedef struct cam_buf_info {
     unsigned long length;       //帧缓冲长度
 } cam_buf_info;
 
-#pragma pack(2)
+#pragma pack(push,2)
 typedef struct {
     unsigned short    bfType;//0x4d42
     int      bfSize;//sizeof(BMPFILEHEADER_T)+sizeof(BMPINFOHEADER_T)+width*height*3, 整个文件的大小
@@ -51,7 +51,6 @@ typedef struct {
     int   bfOffBits;//sizeof(BMPFILEHEADER_T)+sizeof(BMPINFOHEADER_T),就是RGB数据的偏移量, 偏移这两个数据结构
 } BMPFILEHEADER_T;
 
-#pragma pack(2)
 typedef struct{
     int      biSize;//sizeof(BMPINFOHEADER_T)
     int      biWidth;
@@ -65,6 +64,7 @@ typedef struct{
     int      biClrUsed;//0
     int      biClrImportant;//0
 } BMPINFOHEADER_T;
+#pragma pack(pop)
 
 int fb_dev_init(void);
 
