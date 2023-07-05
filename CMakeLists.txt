@@ -45,7 +45,11 @@ if(OPENMP_FOUND)
 endif()
 
 #8.add opencv lib
+if(${OCV_LIB_VERSION} STREQUAL "4")
+set(OpenCV_DIR ${LITE_DIR}/opencv-4-1-0-linux-armv7hf/lib/cmake/opencv4)
+else()
 set(OpenCV_DIR ${LITE_DIR}/opencv-3-4-1-linux-armv7hf/share/OpenCV)
+endif()
 find_package(OpenCV REQUIRED)
 
 #9.set camera files 
