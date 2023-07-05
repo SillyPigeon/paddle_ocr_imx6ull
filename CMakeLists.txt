@@ -45,7 +45,7 @@ if(OPENMP_FOUND)
 endif()
 
 #8.add opencv lib
-set(OpenCV_DIR ${LITE_DIR}/opencv-linux-armv7hf/share/OpenCV)
+set(OpenCV_DIR ${LITE_DIR}/opencv-3-4-1-linux-armv7hf/share/OpenCV)
 find_package(OpenCV REQUIRED)
 
 #9.set camera files 
