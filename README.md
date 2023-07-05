@@ -24,7 +24,7 @@ Paddle Lite 环境运行库头文件(api 头文件) -- /include
 
 Paddle OCR 运行依赖的paddle相关动态库  -- /lib
 
-Paddle OCR 运行依赖的opencv相关动态库  -- /opencv-linux-armv7hf
+Paddle OCR 运行依赖的opencv相关动态库  -- /opencv-x-x-x-linux-armv7hf
 
 #### 2.4 摄像头相关代码目录 --camera
 
@@ -61,6 +61,13 @@ https://www.paddlepaddle.org.cn/lite/develop/source_compile/linux_x86_compile_ar
 #### 步骤2：
 
 运行脚本 ./make.sh 
+
+#### 运行参数说明:
+
+| 参数名称    | 参数说明                                   | 运行示例                |
+| ----------- | ------------------------------------------ | ----------------------- |
+| clean       | 清除编译过程文件和产物                     | ./make.sh clean         |
+| ocv_version | 指定opencv库的版本，默认为3，目前可指定为4 | ./make.sh ocv_version=4 |
 
 #### 注意事项: 
 
